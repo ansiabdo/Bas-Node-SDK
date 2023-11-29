@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documet</title>
+</head>
+<body>
+    <button onclick='initBas()'>BasGate Auth</button>
+</body>
+</html>
+<script>
+    const clientId="<MERCHANT CLIENTID>"
+    let isJSBridgeReady=false
+    console.log("Start Script");
+
+    async function initBas(){
+        console.log("initBas() STARTED");
+
+        window.addEventListener("JSBridgeReady", (event) => {
+        console.log("JSBridgeReady fired");
+        //to do anything you want after SDK is ready
+        basFetchAuthCode().then((v)=>{
+
+        });
+        }, false);
+    }
+
+   // initBas();
+
+    async function basFetchAuthCode()
+    {
+        if(!isJSBridgeReady) await initBas();
+        console.log("basFetchAuthCode() STARTED");
+
+        JSBridge.call('basFetchAuthCode', 
+            {
+                clientId: clientId
+            }).then(function(result) {
+                /****** Response Example ******/
+                /* {
+                "status": 1,
+                "data": {
+                "authId": "",
+                "openId": ""
+                },
+                "messages": [""]
+                }*/
+                /****** End Response Example ******/
+                console.log(JSON.stringify(result));
+                if(data)
+                {
+                    return data;
+                }
+            });
+    }
+
+    async function getPayment(callback)
+    {
+        console.log("yes");
+        const ans = await fetch('https://maddening-face-production.up.railway.app/api/payment/start_payment',{
+            method: "POST",
+        })
+        const data = await ans.json();
+        console.log('start_payment :',data.param_dict);
+        if(data)
+        {
+            callback(data);
+        }
+      
+    }
+    async function sendData(res)
+    {
+        let keyArr = Object.keys(res.param_dict);
+  let valArr = Object.values(res.param_dict);
+
+  console.log("Keys:",keyArr);
+  console.log("Values:",valArr);
+  // when we start the payment verification we will hide our Product form
+  
+
+  // Lets create a form by DOM manipulation
+  // display messages as soon as payment starts
+  let heading1 = document.createElement("h1");
+  heading1.innerText = "Redirecting you to the paytm....";
+  let heading2 = document.createElement("h1");
+  heading2.innerText = "Please do not refresh your page....";
+
+  //create a form that will send necessary details to the paytm
+  let frm = document.createElement("form");
+  frm.action = "https://securegw-stage.paytm.in/order/process/";
+  frm.method = "post";
+  frm.id = "paytmForm";
+
+  // we have to pass all the credentials that we've got from param_dict
+  keyArr.forEach((k, i) => {
+    // create an input element
+    let inp = document.createElement("input");
+    inp.key = i;
+    inp.type = "hidden";
+    // input tag's name should be a key of param_dict
+    inp.name = k;
+    // input tag's value should be a value associated with the key that we are passing in inp.name
+    inp.value = valArr[i];
+    // append those all input tags in the form tag
+    frm.appendChild(inp);
+  });
+
+  // append all the above tags into the body tag
+  document.body.appendChild(heading1);
+  document.body.appendChild(heading2);
+  document.body.appendChild(frm);
+  // finally submit that form
+  frm.submit();
+        
+    }
+    
+</script>
