@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documet</title>
+    <!-- <script type="module" id="sdk" src="./clientsdk.js"></script> -->
+    <script type = "text/javascript" src="clientsdk.js"></script>
+
+</head>
+<body>
+   
+    <br>
+    <br>
+    <center>
+            <button onclick='getAuthCode()'>BasGate Auth</button>
+    </center>
+</body>
+</html>
+ <script>
+    // import { createRequire } from "module";
+    // const require = createRequire(import.meta.url);
+    // const mongoose = require('mongoose');
+    // const basFetchAuthCode = require('./clientsdk');
+    // import * as sdk from './clientsdk';
+    // let sdk= window.document.scripts.namedItem("sdk")
+
+    // console.log(`sdk :${sdk}`)
+    async function getAuthCode(){
+        console.log("====== getAuthCode() ===========");
+        
+        try {
+          let data=  await getBasAuthCode();
+            console.log("data :",JSON.stringify(data));
+            try {
+                let heading1 = document.createElement("h1");
+                heading1.innerText = `Auth Data :\n${JSON.stringify(data)}`;
+            } catch (error) {
+                console.log("ERROR :", error)
+            }
+
+         } catch (error) {
+            console.log("ERROR 3:",error);
+        }
+    }
+</script>

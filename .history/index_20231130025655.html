@@ -7,7 +7,6 @@
     <!-- <script type="module" id="sdk" src="./clientsdk.js"></script> -->
     <script type = "text/javascript" src="./client/clientsdk.js"></script>
     <script type = "text/javascript" src="./config/config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
 </head>
 <body>
@@ -24,12 +23,12 @@
  <script>
     let authInfo;
     async function getget(){
-        console.log("====== getget() ===========");
+        console.log("====== getAuthCode() ===========");
         
         try {
           
                 try {
-                    var authid='5F786CFCBD2882967AAAA17C6EC23C8FF3A98E1C114351FD100C2C32521579AA'
+                    var authid='ACC5E5FB1262A5D667B6382D5F4D113C8FC26AEF5998A25BFCB51C530A3E5586'
                     let userInfo=  await getUserInfo(authid);
                     console.log("userInfo :",JSON.stringify(userInfo));
                     let user = document.createElement("h4");
