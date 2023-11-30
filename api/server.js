@@ -4,6 +4,10 @@ import paymentResponseRouter from './paymentResponse.js';
 import basAuth from './bas_auth.js';
 import cors from 'cors';
 import morgan from 'morgan';
+import * as dotevnv from "dotenv";
+
+dotevnv.config();
+
 
 const app = express();
 app.use(cors());
