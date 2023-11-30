@@ -56,13 +56,13 @@ router.post('/userinfo', (req, res) => {
         params['client_secret'] = MKEY
         params['grant_type'] = 'authorization_code'
         params['code'] = data.authid
-        // params['redirect_uri'] = `https://api-tst.basget.com:4951/api/v1/auth/callback`
+        // params['redirect_uri'] = `https://api-tst.basgate.com:4951/api/v1/auth/callback`
         params['redirect_uri'] = `https://stagebas.yk-bank.com:9101/api/v1/auth/callback`
 
         console.log("params :", params)
 
-        // axios.post(`https://api-tst.basget.com:4951/api/v1/auth/token`, qs.stringify(params), {
-        axios.post(`https://stagebas.yk-bank.com:9101/api/v1/auth/token`, qs.stringify(params), {
+        axios.post(`https://api-tst.basgate.com:4951/api/v1/auth/token`, qs.stringify(params), {
+        // axios.post(`https://stagebas.yk-bank.com:9101/api/v1/auth/token`, qs.stringify(params), {
             headers: {
                 "Content-Type": 'application/x-www-form-urlencoded'
             }
