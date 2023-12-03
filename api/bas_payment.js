@@ -1,6 +1,6 @@
 import express from 'express';
 // const { crypt } = await import('./crypt.js');
-import crypt from './crypt.js';
+import crypt from './crypt';
 import qs from 'qs';
 // require('dotenv').config()
 import * as dotevnv from "dotenv";
@@ -69,7 +69,7 @@ async function initPayment(orderDetails, customerInfo) {
             orderDetails: orderDetails
         }
 
-        let sign = crypt.encrypt(JSON.stringify(params), MKEY)
+        let sign = crypt.crypt.encrypt(JSON.stringify(params), MKEY)
         console.log("signature :", signature);
         myHeaders.append("signature", sign);
 
