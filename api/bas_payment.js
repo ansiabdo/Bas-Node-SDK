@@ -76,9 +76,10 @@ async function initPayment(order) {
 
         let sign
         try {
-            sign = crypt.crypt.encrypt(JSON.stringify(params), MKEY)
+            console.log("MKEY :", MKEY);
+            sign = crypt.encrypt(JSON.stringify(params), MKEY)
         } catch (error) {
-
+            console.log("Error :", error);
         }
         console.log("signature :", sign);
         myHeaders.append("signature", sign);
