@@ -29,34 +29,39 @@
         console.log("====== getAuthCode() ===========");
         let user = document.createElement("h6");
         try {
-            authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then((result)=>{
+            authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then(async (result)=>{
                 try {
                     let div = document.createElement("div");
                     let heading1 = document.createElement("h6");
                     heading1.innerText = `Auth Data :\n${JSON.stringify(result?.data)}`;
                     div.appendChild(heading1)
                     document.body.appendChild(div);
-                    return result
+                    try {
+                    await getUserInfo(result?.data?.authId).then((u)=>{
+                        userInfo=u.data
+                        access_token=result.access_token
+                        console.log("userInfo :",JSON.stringify(u));
+                        user.innerText = `User Data :\n${JSON.stringify(u.data)}`;
+                        document.body.appendChild(user);
+                    });
+                    
+                    } catch (error) {
+                        console.log("ERROR 3:",error);
+                        return {}
+                    }   
+                    // return result
                 } catch (error) {
                     console.log("ERROR :", error)
+                    return {}
                 }
             });
 
-            if(authInfo)
-            {
-                try {
-                    userInfo=  await getUserInfo(authInfo.data.authId);
-                    userInfo=  await getUserInfo(authInfo.data.authId);
-                    access_token=userInfo.access_token
-                    console.log("userInfo :",JSON.stringify(userInfo));
-                    user.innerText = `User Data :\n${JSON.stringify(userInfo.data)}`;
-                    document.body.appendChild(user);
-                } catch (error) {
-                    console.log("ERROR 3:",error);
-                }    
-            }else{
-                user.innerText = `authInfo :${authInfo}`;
-            }
+            // if(authInfo)
+            // {
+                
+            // }else{
+            //     user.innerText = `authInfo :${authInfo}`;
+            // }
         } catch (error) {
             console.log("ERROR 3:",error);
         }
@@ -65,25 +70,32 @@
     async function processPayment(){
         console.log("===== processPayment() ======");
         let myOrder={
-        "orderDetails": {
-            "SENDER_MOBILE": "772612217",
-            "RECEIVER_MOBILE": "711271124",
-            "PRODUCT_NAME":"IPHONE 15",
-            "PRODUCT_QTY":1,
-        },
-        "paymentProvider":"BAS_GATE",
-        "customerInfo":userInfo
-    }
+            "orderDetails": {
+                "SENDER_MOBILE": "772612217",
+                "RECEIVER_MOBILE": "711271124",
+                "PRODUCT_NAME":"IPHONE 15",
+                "PRODUCT_QTY":1,
+            },
+            "paymentProvider":"BAS_GATE",
+            "customerInfo":userInfo
+        }
+        alert(JSON.stringify(userInfo))
+        alert(access_token)
         let payment = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
-            if(access_token?.length <=0) await getBasAuthCode(BAS_CLIENT_ID)
+            if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
             try {
-                let paymentInfo=  await getPayment(myOrder);
-                console.log("paymentInfo :",JSON.stringify(paymentInfo));
-                payment.innerText = `Payment Data :\n${JSON.stringify(paymentInfo)}`;
-                document.body.appendChild(payment);
-                await basPayment(paymentInfo)
+                let paymentInfo=  await getPayment(myOrder).then(async (result)=>{
+                    alert(JSON.stringify(result))
+                    if(result){
+                        console.log("paymentInfo :",JSON.stringify(result));
+                        payment.innerText = `Payment Data :\n${JSON.stringify(result)}`;
+                        document.body.appendChild(payment);
+                        await basPayment(result)
+                    }
+                });
+               
             } catch (error) {
                 console.log("ERROR 3:",error);
             }    

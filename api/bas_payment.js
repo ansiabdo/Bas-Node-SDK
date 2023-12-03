@@ -24,10 +24,10 @@ const generateOrderId = () => {
 
 router.post('/checkout', async (req, res) => {
     var { paymentProvider, orderDetails, customerInfo } = req.body
-    console.log("checkout req :", req.body)
+    console.log("checkout req.body :", req.body)
 
     if (paymentProvider == "BAS_GATE") {
-        await initPayment(orderDetails, customerInfo).then(async (response) => {
+        await initPayment({ orderDetails, customerInfo }).then(async (response) => {
             let data = await response.json()
             console.log("response :", data)
             return res.status(200).json(data)
@@ -43,9 +43,9 @@ router.post('/checkout', async (req, res) => {
 
 });
 
-async function initPayment(orderDetails, customerInfo) {
-    console.log("initPayment orderDetails,customerInfo:", orderDetails, customerInfo)
-    if (orderDetails) {
+async function initPayment(order) {
+    console.log("initPayment order:", order)
+    if (order) {
         var myHeaders = new Headers();
         const requestTimestamp = Date.now()
         myHeaders.append("Content-Type", "application/json");
@@ -60,17 +60,22 @@ async function initPayment(orderDetails, customerInfo) {
             "appId": APPID,
             "orderType": "billpayment",
             "callBackUrl": CALLBACKURL + `/${orderId}`,
-            "customerInfo": customerInfo,
+            "customerInfo": order.customerInfo,
             "amount": {
                 "value": 1100.0,
                 "currency": "YER"
             },
             "orderId": orderId,
-            orderDetails: orderDetails
+            orderDetails: order.orderDetails
         }
 
-        let sign = crypt.crypt.encrypt(JSON.stringify(params), MKEY)
-        console.log("signature :", signature);
+        let sign
+        try {
+            sign = crypt.crypt.encrypt(JSON.stringify(params), MKEY)
+        } catch (error) {
+
+        }
+        console.log("signature :", sign);
         myHeaders.append("signature", sign);
 
         var requestOptions = {
