@@ -1,11 +1,20 @@
-import express from 'express';
-import paymentInitiationRouter from './paymentInitiation.js';
-import paymentResponseRouter from './paymentResponse.js';
-import basAuth from './bas_auth.js';
-import basPayment from './bas_payment.js';
-import cors from 'cors';
-import morgan from 'morgan';
-import * as dotevnv from "dotenv";
+
+var express = require("express")
+// import paymentInitiationRouter from './paymentInitiation.js';
+// import paymentResponseRouter from './paymentResponse.js';
+var basAuth = require('./bas_auth.js');
+var basPayment = require('./bas_payment.js');
+var cors = require('cors');
+var morgan = require('morgan');
+var dotevnv = require("dotenv");
+// import express from 'express';
+// import paymentInitiationRouter from './paymentInitiation.js';
+// import paymentResponseRouter from './paymentResponse.js';
+// import basAuth from './bas_auth.js';
+// import basPayment from './bas_payment.js';
+// import cors from 'cors';
+// import morgan from 'morgan';
+// import * as dotevnv from "dotenv";
 
 dotevnv.config();
 

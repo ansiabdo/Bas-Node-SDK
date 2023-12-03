@@ -1,14 +1,9 @@
-var express = require('express');
-const { crypt } = require('./crypt.js');
-var qs = require('qs');
+import express from 'express';
+// const { crypt } = await import('./crypt.js');
+import * as crypt from './crypt.js';
+import qs from 'qs';
 // require('dotenv').config()
-var dotevnv = require("dotenv");
-// import express from 'express';
-// // const { crypt } = await import('./crypt.js');
-// import * as crypt from './crypt.js';
-// import qs from 'qs';
-// // require('dotenv').config()
-// import * as dotevnv from "dotenv";
+import * as dotevnv from "dotenv";
 
 dotevnv.config();
 
@@ -98,5 +93,4 @@ async function initPayment(order) {
     }
 }
 
-// export default router;
-module.exports = router;
+export default router;

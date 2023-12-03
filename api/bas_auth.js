@@ -1,8 +1,13 @@
-import express from 'express';
-const { crypt } = await import('./crypt.js');
-import qs from 'qs';
+var express = require('express');
+const { crypt } = require('./crypt.js');
+var qs = require('qs');
 // require('dotenv').config()
-import * as dotevnv from "dotenv";
+var dotevnv = require("dotenv");
+// import express from 'express';
+// const { crypt } = await import('./crypt.js');
+// import qs from 'qs';
+// // require('dotenv').config()
+// import * as dotevnv from "dotenv";
 
 dotevnv.config();
 
@@ -89,4 +94,5 @@ async function getBasUserInfo(token) {
     }
 }
 
-export default router;
+// export default router;
+module.exports = router;

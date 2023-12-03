@@ -1,7 +1,7 @@
 "use strict";
 
 // var crypto = require('crypto');
-const { createCipheriv, createDecipheriv, randomBytes, createHash } = require('node:crypto');
+const { createCipheriv, createDecipheriv, randomBytes, createHash } = await import('node:crypto');
 
 // var util = require('util');
 
@@ -70,13 +70,13 @@ var crypt = {
   md5sum: function (salt, data) {
     return createHash('md5').update(salt + data).digest('hex');
   },
-
+  
   sha256sum: function (salt, data) {
     return createHash('sha256').update(data + salt).digest('hex');
   }
 };
 
-module.exports.crypt = crypt;
+// module.exports.crypt = crypt;
 
 // (function () {
 //   var i;
