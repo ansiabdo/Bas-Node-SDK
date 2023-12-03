@@ -11,10 +11,6 @@ const router = express.Router();
 const CLIENTID = process.env.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
 const MKEY = process.env.BAS_MKEY ?? "R0Biem8wOUIySkJxNGd6cQ==";
 const BASURL = process.env.BAS_BASE_URL
-const generateOrderId = () => {
-    // Logic to generate a unique order ID (you can use a library or custom logic)
-    return 'ORDER_' + Math.floor(Math.random() * 1000000);
-};
 
 router.post('/userinfo', async (req, res) => {
     // Your logic to handle payment initiation
@@ -48,13 +44,13 @@ async function getToken(authid) {
         console.log("getToken :", myHeaders)
 
 
-        var raw = JSON.stringify({
+        var raw = {
             'client_id': CLIENTID,
             'client_secret': MKEY,
             'grant_type': 'authorization_code',
             'code': authid,
             'redirect_uri': `${BASURL}/api/v1/auth/callback`,
-        });
+        };
 
         var url = `${BASURL}/api/v1/auth/token`
 
@@ -65,7 +61,7 @@ async function getToken(authid) {
             // redirect: 'follow'
         };
 
-        console.log("params :", url, raw);
+        console.log("params :", url, qs.stringify(raw));
         return await fetch(url, requestOptions)
     }
 }

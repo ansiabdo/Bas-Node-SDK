@@ -2,6 +2,7 @@
 
 // var BAS_ENVIORMENT = 'TEST';   // PROD FOR PRODUCTION
 // var BAS_FINAL_URL = '';
+var BAS_CLIENT_ID = 'fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd'
 
 // const BAS_CLIENT_ID = "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd"
 // var BAS_BASE_URL_PROD = "https://stagebas.yk-bank.com:9101"

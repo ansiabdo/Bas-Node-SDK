@@ -10,7 +10,7 @@ async function initBas() {
         console.log("JSBridgeReady fired ");
         isJSBridgeReady = true
         //to do anything you want after SDK is ready
-        await getBasAuthCode();
+        await getBasAuthCode(BAS_CLIENT_ID);
         // .then((v) => {
         //     console.log("getBasAuthCode v:", v);
 
@@ -35,7 +35,7 @@ const getBasAuthCode = async (clientId) => {
             try {
                 let div = document.createElement("div");
                 let heading1 = document.createElement("h6");
-                heading1.innerText = `Auth Data :\n${result.data.authId}`;
+                heading1.innerText = `Auth Data :\n${result?.data?.authId}`;
                 div.appendChild(heading1)
                 document.body.appendChild(div);
             } catch (error) {
