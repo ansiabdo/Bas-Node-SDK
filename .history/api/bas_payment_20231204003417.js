@@ -1,6 +1,5 @@
 import express from 'express';
-// const { crypt } = await import('./crypt.js');
-import crypt from './crypt.js';
+const { crypt } = await import('./crypt.js');
 import qs from 'qs';
 // require('dotenv').config()
 import * as dotevnv from "dotenv";
@@ -13,7 +12,6 @@ const CLIENTID = process.env.BAS_CLIENT_ID
 const CLIENT_SECRET = process.env.BAS_CLIENT_SECERT
 const BASURL = process.env.BAS_BASE_URL
 const APPID = process.env.BAS_APP_ID
-const MKEY = process.env.BAS_MKEY
 
 const CALLBACKURL = process.env.CALL_BACK_API_URL
 
@@ -49,10 +47,11 @@ async function initPayment(orderDetails, customerInfo) {
         var myHeaders = new Headers();
         const requestTimestamp = Date.now()
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("signature", "XXBASSIGNATUREXX");
         myHeaders.append("requestTimestamp", requestTimestamp);
         console.log("initPayment myHeaders:", myHeaders)
 
-
+        
 
         let orderId = generateOrderId();
         let params = {
@@ -68,10 +67,6 @@ async function initPayment(orderDetails, customerInfo) {
             "orderId": orderId,
             orderDetails: orderDetails
         }
-
-        let sign = crypt.encrypt(JSON.stringify(params), MKEY)
-        console.log("signature :", signature);
-        myHeaders.append("signature", sign);
 
         var requestOptions = {
             method: 'POST',

@@ -76,7 +76,7 @@ var crypt = {
   }
 };
 
-// module.exports.crypt = crypt;
+module.exports.crypt = crypt;
 
 // (function () {
 //   var i;
