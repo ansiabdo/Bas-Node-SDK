@@ -1,16 +1,15 @@
 import express from 'express';
+import * as checksum from './checksum.js';
+import * as config from '../config/config.js';
+import axios from 'axios';
 const { crypt } = await import('./crypt.js');
 import qs from 'qs';
-// require('dotenv').config()
-import * as dotevnv from "dotenv";
-
-dotevnv.config();
 
 const router = express.Router();
 
-const CLIENTID = process.env.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
-const MKEY = process.env.BAS_MKEY ?? "R0Biem8wOUIySkJxNGd6cQ==";
-const BASURL = process.env.BAS_BASE_URL
+const CLIENTID = config.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
+const MKEY = config.BAS_MKEY ?? "R0Biem8wOUIySkJxNGd6cQ==";
+const BASURL = config.BAS_FINAL_URL
 const generateOrderId = () => {
     // Logic to generate a unique order ID (you can use a library or custom logic)
     return 'ORDER_' + Math.floor(Math.random() * 1000000);
@@ -43,7 +42,7 @@ async function getToken(authid) {
     if (authid) {
 
         var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        myHeaders.append("Content-Type: application/x-www-form-urlencoded");
 
         console.log("getToken :", myHeaders)
 
@@ -56,17 +55,15 @@ async function getToken(authid) {
             'redirect_uri': `${BASURL}/api/v1/auth/callback`,
         });
 
-        var url = `${BASURL}/api/v1/auth/token`
-
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: qs.stringify(raw),
-            // redirect: 'follow'
+            redirect: 'follow'
         };
 
-        console.log("params :", url, raw);
-        return await fetch(url, requestOptions)
+        console.log("params :", raw);
+        return await fetch(`${BASURL}/api/v1/auth/token`, requestOptions)
     }
 }
 

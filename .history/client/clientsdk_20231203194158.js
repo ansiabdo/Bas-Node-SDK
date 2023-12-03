@@ -1,8 +1,6 @@
 let isJSBridgeReady = false
 console.log("Start ClientSDK Script");
 
-// var BASE_URL = require('../config/config.js')
-
 async function initBas() {
     console.log("initBas() STARTED");
 
@@ -28,7 +26,7 @@ const getBasAuthCode = async (clientId) => {
         {
             clientId: clientId
         }).then(function (result) {
-
+          
             authData = result
             // alert(JSON.stringify(result))
             console.log("Result 2:", JSON.stringify(result));
@@ -59,7 +57,6 @@ async function getUserInfo(authId) {
         "authid": authId
     });
 
-    var url = `${BASE_URL}/auth/userinfo`
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -68,8 +65,8 @@ async function getUserInfo(authId) {
     };
 
 
-    console.log("params :", url, raw);
-    const ans = await fetch(url, requestOptions)
+    console.log("params :", raw);
+    const ans = await fetch(`${BASE_URL}/auth/userinfo`, requestOptions)
     const data = ans.json();
     console.log('data :', data);
     if (data) {
