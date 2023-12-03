@@ -46,6 +46,7 @@
             {
                 try {
                     userInfo=  await getUserInfo(authInfo.data.authId);
+                    userInfo=  await getUserInfo(authInfo.data.authId);
                     access_token=userInfo.access_token
                     console.log("userInfo :",JSON.stringify(userInfo));
                     user.innerText = `User Data :\n${JSON.stringify(userInfo.data)}`;
