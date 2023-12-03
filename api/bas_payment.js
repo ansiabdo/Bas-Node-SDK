@@ -42,13 +42,13 @@ router.post('/checkout', async (req, res) => {
 });
 
 async function initPayment(orderDetails) {
-    console.log("initPayment :", orderDetails)
+    console.log("initPayment orderDetails:", orderDetails)
     if (orderDetails) {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("signature", "XXBASSIGNATUREXX");
         myHeaders.append("requestTimestamp", "XXBASTIMESTAMPXX");
-        console.log("initPayment :", myHeaders)
+        console.log("initPayment myHeaders:", myHeaders)
 
         let orderId = generateOrderId();
         let params = {
@@ -77,7 +77,8 @@ async function initPayment(orderDetails) {
 
         var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
-        console.log("params :", url, urlencoded.toString());
+        console.log("url :", url);
+        console.log("params :", JSON.stringify(params));
         return await fetch(url, requestOptions)
     }
 }

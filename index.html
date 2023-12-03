@@ -22,7 +22,7 @@
 </html>
  <script>
     let authInfo;
-    let access_token;
+    let access_token='';
     let myOrder={
         "orderDetails": {
             "SENDER_MOBILE": "772612217",
@@ -40,7 +40,7 @@
                 try {
                     let div = document.createElement("div");
                     let heading1 = document.createElement("h6");
-                    heading1.innerText = `Auth Data :\n${result?.data?.authId}`;
+                    heading1.innerText = `Auth Data :\n${result?.data}`;
                     div.appendChild(heading1)
                     document.body.appendChild(div);
                     return result
@@ -55,7 +55,7 @@
                     let userInfo=  await getUserInfo(authInfo.data.authId);
                     access_token=userInfo.access_token
                     console.log("userInfo :",JSON.stringify(userInfo));
-                    user.innerText = `User Data :\n${JSON.stringify(userInfo)}`;
+                    user.innerText = `User Data :\n${JSON.stringify(userInfo.data)}`;
                     document.body.appendChild(user);
                 } catch (error) {
                     console.log("ERROR 3:",error);
@@ -73,7 +73,7 @@
         let payment = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
-            if(!access_token ) await getBasAuthCode(BAS_CLIENT_ID)
+            if(access_token.length <=0) await getBasAuthCode(BAS_CLIENT_ID)
             try {
                 let paymentInfo=  await getPayment(myOrder);
                 console.log("paymentInfo :",JSON.stringify(paymentInfo));
