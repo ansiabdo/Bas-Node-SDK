@@ -57,7 +57,7 @@ async function getToken(authid) {
 
         var url = `${BASURL}/api/v1/auth/token`
 
-        console.log("params :", url, qs.stringify(raw));
+        console.log("params :", url, urlencoded.toString());
         return await fetch(url, requestOptions)
     }
 }
