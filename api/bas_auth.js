@@ -9,7 +9,7 @@ dotevnv.config();
 const router = express.Router();
 
 const CLIENTID = process.env.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
-const MKEY = process.env.BAS_MKEY ?? "R0Biem8wOUIySkJxNGd6cQ==";
+const CLIENT_SECRET = process.env.BAS_CLIENT_SECERT
 const BASURL = process.env.BAS_BASE_URL
 
 router.post('/userinfo', async (req, res) => {
@@ -37,29 +37,25 @@ router.post('/userinfo', async (req, res) => {
 async function getToken(authid) {
     console.log("getToken :", authid)
     if (authid) {
-
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
         console.log("getToken :", myHeaders)
 
-
-        var raw = {
-            'client_id': CLIENTID,
-            'client_secret': MKEY,
-            'grant_type': 'authorization_code',
-            'code': authid,
-            'redirect_uri': `${BASURL}/api/v1/auth/callback`,
-        };
-
-        var url = `${BASURL}/api/v1/auth/token`
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("client_id", CLIENTID);
+        urlencoded.append("client_secret", CLIENT_SECRET);
+        urlencoded.append("grant_type", "authorization_code");
+        urlencoded.append("code", authid);
+        urlencoded.append("redirect_uri", `${BASURL}/api/v1/auth/callback`);
 
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: qs.stringify(raw),
-            // redirect: 'follow'
+            body: urlencoded,
+            redirect: 'follow'
         };
+
+        var url = `${BASURL}/api/v1/auth/token`
 
         console.log("params :", url, qs.stringify(raw));
         return await fetch(url, requestOptions)
