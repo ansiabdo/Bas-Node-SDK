@@ -21,11 +21,11 @@ const generateOrderId = () => {
 };
 
 router.post('/checkout', async (req, res) => {
-    var { paymentProvider, orderDetails } = req.body
+    var { paymentProvider, orderDetails, customerInfo } = req.body
     console.log("checkout req :", req.body)
 
     if (paymentProvider == "BAS_GATE") {
-        await initPayment(orderDetails).then(async (response) => {
+        await initPayment(orderDetails, customerInfo).then(async (response) => {
             let data = await response.json()
             console.log("response :", data)
             return res.status(200).json(data)
@@ -41,25 +41,25 @@ router.post('/checkout', async (req, res) => {
 
 });
 
-async function initPayment(orderDetails) {
-    console.log("initPayment orderDetails:", orderDetails)
+async function initPayment(orderDetails, customerInfo) {
+    console.log("initPayment orderDetails,customerInfo:", orderDetails, customerInfo)
     if (orderDetails) {
         var myHeaders = new Headers();
+        const requestTimestamp = Date.now()
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("signature", "XXBASSIGNATUREXX");
-        myHeaders.append("requestTimestamp", "XXBASTIMESTAMPXX");
+        myHeaders.append("requestTimestamp", requestTimestamp);
         console.log("initPayment myHeaders:", myHeaders)
+
+        
 
         let orderId = generateOrderId();
         let params = {
-            "requestTimestamp": "XXBASTIMESTAMPXX",
+            "requestTimestamp": requestTimestamp,
             "appId": APPID,
             "orderType": "billpayment",
             "callBackUrl": CALLBACKURL + `/${orderId}`,
-            "customerInfo": {
-                "id": "50",
-                "name": "Abdullah AlAnsi"
-            },
+            "customerInfo": customerInfo,
             "amount": {
                 "value": 1100.0,
                 "currency": "YER"

@@ -23,15 +23,7 @@
  <script>
     let authInfo;
     let access_token='';
-    let myOrder={
-        "orderDetails": {
-            "SENDER_MOBILE": "772612217",
-            "RECEIVER_MOBILE": "711271124",
-            "PRODUCT_NAME":"IPHONE 15",
-            "PRODUCT_QTY":1,
-        },
-        "paymentProvider":"BAS_GATE"
-    }
+   let userInfo={}
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
         let user = document.createElement("h6");
@@ -52,7 +44,7 @@
             if(authInfo)
             {
                 try {
-                    let userInfo=  await getUserInfo(authInfo.data.authId);
+                    userInfo=  await getUserInfo(authInfo.data.authId);
                     access_token=userInfo.access_token
                     console.log("userInfo :",JSON.stringify(userInfo));
                     user.innerText = `User Data :\n${JSON.stringify(userInfo.data)}`;
@@ -70,6 +62,16 @@
     
     async function processPayment(){
         console.log("====== processPayment() ===========");
+        let myOrder={
+        "orderDetails": {
+            "SENDER_MOBILE": "772612217",
+            "RECEIVER_MOBILE": "711271124",
+            "PRODUCT_NAME":"IPHONE 15",
+            "PRODUCT_QTY":1,
+        },
+        "paymentProvider":"BAS_GATE",
+        "customerInfo":userInfo
+    }
         let payment = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
