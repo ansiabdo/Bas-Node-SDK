@@ -23,6 +23,7 @@
 </html>
  <script>
     let authInfo;
+    let access_token;
     async function getget(){
         console.log("====== getget() ===========");
         
@@ -31,7 +32,7 @@
                     var authid='D3599B698397AE5B82764571E197AFB12FAD9EC714C58E25905584853AD8C789'
                     let userInfo=  await getUserInfo(authid);
                     console.log("userInfo :",JSON.stringify(userInfo));
-                    let user = document.createElement("h4");
+                    let user = document.createElement("h6");
                     user.innerText = `User Data :\n${JSON.stringify(userInfo)}`;
                     document.body.appendChild(user);
                 } catch (error) {
@@ -45,22 +46,23 @@
     
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
-        
+        let user = document.createElement("h6");
         try {
             authInfo=  await getBasAuthCode(BAS_CLIENT_ID);
-            console.log("authInfo :",JSON.stringify(authInfo));
             if(authInfo)
             {
                 try {
                     let userInfo=  await getUserInfo(authInfo.data.authId);
+                    access_token=userInfo.access_token
                     console.log("userInfo :",JSON.stringify(userInfo));
-                    let user = document.createElement("h4");
                     user.innerText = `User Data :\n${JSON.stringify(userInfo)}`;
                     document.body.appendChild(user);
                 } catch (error) {
                     console.log("ERROR 3:",error);
                 }    
-            }    
+            }else{
+                user.innerText = `authInfo :${authInfo}`;
+            }
         } catch (error) {
             console.log("ERROR 3:",error);
         }
@@ -68,8 +70,21 @@
     
     async function processPayment(){
         console.log("====== processPayment() ===========");
-        
-      
+        let payment = document.createElement("h6");
+        try {
+            if(!access_token ) await getBasAuthCode(BAS_CLIENT_ID)
+            try {
+                let userInfo=  await getPayment(authInfo.data.authId);
+                access_token=userInfo.access_token
+                console.log("userInfo :",JSON.stringify(userInfo));
+                user.innerText = `User Data :\n${JSON.stringify(userInfo)}`;
+                document.body.appendChild(user);
+            } catch (error) {
+                console.log("ERROR 3:",error);
+            }    
+        } catch (error) {
+            console.log("ERROR 3:",error);
+        }
     }
 
 
