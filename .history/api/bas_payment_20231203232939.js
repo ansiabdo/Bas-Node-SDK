@@ -8,24 +8,31 @@ dotevnv.config();
 
 const router = express.Router();
 
-const CLIENTID = process.env.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
+const CLIENTID = process.env.BAS_CLIENT_ID
 const CLIENT_SECRET = process.env.BAS_CLIENT_SECERT
 const BASURL = process.env.BAS_BASE_URL
+const APPID = process.env.BAS_APP_ID
+
+const CALLBACKURL = process.env.CALL_BACK_API_URL
+
 let access_token;
+const generateOrderId = () => {
+    // Logic to generate a unique order ID (you can use a library or custom logic)
+    return 'ORDER_' + Math.floor(Math.random() * 1000000);
+};
 
-router.post('/userinfo', async (req, res) => {
-    // Your logic to handle payment initiation
-    var { authid } = req.body
-    console.log("userinfo req :", req.body)
+router.post('/checkout', async (req, res) => {
+    var { paymentProvider ,orderDetails } = req.body
+    console.log("checkout req :", req.body)
 
-    if (authid) {
-        await getBasToken(authid).then(async (response) => {
+    if (paymentProvider =="BAS_GATE") {
+        await initPayment(orderDetails).then(async (response) => {
             let data = await response.json()
-            console.log("================== getBasToken data :", data)
+            console.log("response :", data)
             access_token = data.access_token
             await getBasUserInfo(access_token).then(async (user) => {
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", data)
+                console.log("user :", data)
                 return res.status(200).json(userData)
             }).catch((error) => {
                 let data = error?.response?.data ?? '{}'
@@ -44,28 +51,41 @@ router.post('/userinfo', async (req, res) => {
 
 });
 
-async function getBasToken(authid) {
-    console.log("getBasToken :", authid)
-    if (authid) {
+async function initPayment(orderDetails) {
+    console.log("initPayment :", orderDetails)
+    if (orderDetails) {
         var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        console.log("getBasToken :", myHeaders)
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("signature", "XXBASSIGNATUREXX");
+        myHeaders.append("requestTimestamp", "XXBASTIMESTAMPXX");
+        console.log("initPayment :", myHeaders)
 
-        var urlencoded = new URLSearchParams();
-        urlencoded.append("client_id", CLIENTID);
-        urlencoded.append("client_secret", CLIENT_SECRET);
-        urlencoded.append("grant_type", "authorization_code");
-        urlencoded.append("code", authid);
-        urlencoded.append("redirect_uri", `${BASURL}/api/v1/auth/callback`);
+        let orderId=generateOrderId();
+        let params={
+            "requestTimestamp": "",
+            "appId": APPID,
+            "OrderType": "billpayment",
+            "callBackUrl": CALLBACKURL +`/${orderId}`,
+            "customerInfo": {
+                "id": "50",
+                "name":"Abdullah AlAnsi"
+            },
+            "amount": {
+                "value": 1100.0,
+                "currency": "YER"
+            },
+            "orderId":orderId ,
+            orderDetails:orderDetails
+        }
 
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: urlencoded,
+            body: JSON.stringify(params),
             redirect: 'follow'
         };
 
-        var url = `${BASURL}/api/v1/auth/token`
+        var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
         console.log("params :", url, urlencoded.toString());
         return await fetch(url, requestOptions)

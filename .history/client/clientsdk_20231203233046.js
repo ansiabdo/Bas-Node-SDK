@@ -1,7 +1,8 @@
-
-//#region BAS SDK Client Side 
 let isJSBridgeReady = false
 console.log("Start ClientSDK Script");
+
+
+// var BASE_URL = require('../config/config.js')
 
 async function initBas() {
     console.log("initBas() STARTED");
@@ -28,12 +29,22 @@ const getBasAuthCode = async (clientId) => {
         {
             clientId: clientId
         }).then(function (result) {
-            alert(JSON.stringify(result))
-            console.log("getBasAuthCode Result:", JSON.stringify(result));
+
+            authData = result
+            // alert(JSON.stringify(result))
+            console.log("Result 2:", JSON.stringify(result));
+            try {
+                let div = document.createElement("div");
+                let heading1 = document.createElement("h6");
+                heading1.innerText = `Auth Data :\n${result?.data?.authId}`;
+                div.appendChild(heading1)
+                document.body.appendChild(div);
+            } catch (error) {
+                console.log("ERROR :", error)
+            }
+
             if (result) {
                 return result;
-            } else {
-                return null
             }
         });
 }
@@ -69,9 +80,6 @@ const basPayment = async (data) => {
     });
 
 }
-//#endregion
-
-//#region Helper Functions 
 async function getUserInfo(authId) {
 
     var myHeaders = new Headers();
@@ -104,6 +112,10 @@ async function getPayment(order) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    // var raw = JSON.stringify({
+    //     "authid": authId
+    // });
+
     var url = `${BASE_URL}/order/checkout`
     var requestOptions = {
         method: 'POST',
@@ -111,6 +123,7 @@ async function getPayment(order) {
         body: JSON.stringify(order),
         redirect: 'follow'
     };
+
 
     console.log("params :", url, JSON.stringify(order));
     const ans = await fetch(url, requestOptions)
@@ -122,4 +135,3 @@ async function getPayment(order) {
 
 }
 
-//#endregion

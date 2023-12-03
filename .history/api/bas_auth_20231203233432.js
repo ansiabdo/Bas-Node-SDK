@@ -21,11 +21,11 @@ router.post('/userinfo', async (req, res) => {
     if (authid) {
         await getBasToken(authid).then(async (response) => {
             let data = await response.json()
-            console.log("================== getBasToken data :", data)
+            console.log("response :", data)
             access_token = data.access_token
             await getBasUserInfo(access_token).then(async (user) => {
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", data)
+                console.log("user :", data)
                 return res.status(200).json(userData)
             }).catch((error) => {
                 let data = error?.response?.data ?? '{}'

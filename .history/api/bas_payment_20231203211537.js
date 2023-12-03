@@ -21,11 +21,11 @@ router.post('/userinfo', async (req, res) => {
     if (authid) {
         await getBasToken(authid).then(async (response) => {
             let data = await response.json()
-            console.log("================== getBasToken data :", data)
+            console.log("response :", data)
             access_token = data.access_token
             await getBasUserInfo(access_token).then(async (user) => {
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", data)
+                console.log("user :", data)
                 return res.status(200).json(userData)
             }).catch((error) => {
                 let data = error?.response?.data ?? '{}'
@@ -86,6 +86,36 @@ async function getBasUserInfo(token) {
         var url = `${BASURL}/api/v1/auth/userinfo`
         console.log("params :", url);
         return await fetch(url, requestOptions)
+    }
+}
+
+async function initPayment(authid) {
+    if (authid) {
+        var params = {};
+        /* initialize an array */
+        params['client_id'] = CLIENTID
+        params['client_secret'] = MKEY
+        params['grant_type'] = 'authorization_code'
+        params['code'] = authid
+        params['redirect_uri'] = `${BASURL}/api/v1/auth/callback`
+        // params['redirect_uri'] = `https://stagebas.yk-bank.com:9101/api/v1/auth/callback`
+
+        console.log("params :", params)
+
+        await fetch(`${BASURL}/api/v1/auth/token`, {
+            body: qs.stringify(params), method: "POST", headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(async (response) => {
+                let data = await response.json()
+                console.log("response :", data)
+                res.status(200).json(data)
+            }).catch((error) => {
+                let data = error?.response?.data ?? '{}'
+                console.error("Error :", data)
+                res.status(500).send(data)
+            })
     }
 }
 

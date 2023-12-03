@@ -8,24 +8,23 @@ dotevnv.config();
 
 const router = express.Router();
 
-const CLIENTID = process.env.BAS_CLIENT_ID ?? "fbbc6c5d-c471-42dd-a46a-9a2bad1c99cd";
+const CLIENTID = process.env.BAS_CLIENT_ID
 const CLIENT_SECRET = process.env.BAS_CLIENT_SECERT
 const BASURL = process.env.BAS_BASE_URL
 let access_token;
 
-router.post('/userinfo', async (req, res) => {
-    // Your logic to handle payment initiation
+router.post('/payment', async (req, res) => {
     var { authid } = req.body
-    console.log("userinfo req :", req.body)
+    console.log("paymentInfo req :", req.body)
 
     if (authid) {
         await getBasToken(authid).then(async (response) => {
             let data = await response.json()
-            console.log("================== getBasToken data :", data)
+            console.log("response :", data)
             access_token = data.access_token
             await getBasUserInfo(access_token).then(async (user) => {
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", data)
+                console.log("user :", data)
                 return res.status(200).json(userData)
             }).catch((error) => {
                 let data = error?.response?.data ?? '{}'
@@ -86,6 +85,36 @@ async function getBasUserInfo(token) {
         var url = `${BASURL}/api/v1/auth/userinfo`
         console.log("params :", url);
         return await fetch(url, requestOptions)
+    }
+}
+
+async function initPayment(authid) {
+    if (authid) {
+        var params = {};
+        /* initialize an array */
+        params['client_id'] = CLIENTID
+        params['client_secret'] = MKEY
+        params['grant_type'] = 'authorization_code'
+        params['code'] = authid
+        params['redirect_uri'] = `${BASURL}/api/v1/auth/callback`
+        // params['redirect_uri'] = `https://stagebas.yk-bank.com:9101/api/v1/auth/callback`
+
+        console.log("params :", params)
+
+        await fetch(`${BASURL}/api/v1/auth/token`, {
+            body: qs.stringify(params), method: "POST", headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(async (response) => {
+                let data = await response.json()
+                console.log("response :", data)
+                res.status(200).json(data)
+            }).catch((error) => {
+                let data = error?.response?.data ?? '{}'
+                console.error("Error :", data)
+                res.status(500).send(data)
+            })
     }
 }
 

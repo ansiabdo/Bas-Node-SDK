@@ -15,8 +15,8 @@
     <br>
     <br>
     <center>
-            <button onclick='getAuthCode()' >BasGate Auth</button>
-            <button onclick='processPayment()' >BasGate Payment</button>
+            <button onclick='getAuthCode()'>BasGate Auth</button>
+            <button onclick='processPayment()' disabled=access_token==null >BasGate Payment</button>
     </center>
 </body>
 </html>
@@ -36,19 +36,7 @@
         console.log("====== getAuthCode() ===========");
         let user = document.createElement("h6");
         try {
-            authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then((result)=>{
-                try {
-                    let div = document.createElement("div");
-                    let heading1 = document.createElement("h6");
-                    heading1.innerText = `Auth Data :\n${result?.data?.authId}`;
-                    div.appendChild(heading1)
-                    document.body.appendChild(div);
-                    return result
-                } catch (error) {
-                    console.log("ERROR :", error)
-                }
-            });
-
+            authInfo=  await getBasAuthCode(BAS_CLIENT_ID);
             if(authInfo)
             {
                 try {
@@ -79,7 +67,6 @@
                 console.log("paymentInfo :",JSON.stringify(paymentInfo));
                 payment.innerText = `Payment Data :\n${JSON.stringify(paymentInfo)}`;
                 document.body.appendChild(payment);
-                await basPayment()
             } catch (error) {
                 console.log("ERROR 3:",error);
             }    
