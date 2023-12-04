@@ -226,7 +226,7 @@ async function paymentStatus(orderId) {
         try {
             console.log("MKEY :", MKEY);
             //atob("R0Biem8wOUIySkJxNGd6cQ==")
-            sign = await BasChecksum.generateSignature(JSON.stringify(body), atob(MKEY));
+            sign = await BasChecksum.generateSignature(JSON.stringify(body), MKEY);
             // await paytmChecksum.then(function (result) {
             console.log("generateSignature Returns: " + sign);
             //     sign = result
