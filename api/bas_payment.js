@@ -120,48 +120,48 @@ async function initPayment(order) {
         //     } //order.orderDetails
         // }
 
-        var head = {}
-        var body = {}
-        body["appId"] = APPID;
-        body["requestTimestamp"] = requestTimestamp
-        body["orderType"] = "PayBill";
-        body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
-        body["customerInfo"] = {};
+        var Head = {}
+        var Body = {}
+        Body["appId"] = APPID;
+        Body["requestTimestamp"] = requestTimestamp
+        Body["orderType"] = "PayBill";
+        Body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
+        Body["customerInfo"] = {};
 
-        body["customerInfo"]["id"] = order.customerInfo.open_id;
-        body["customerInfo"]["name"] = order.customerInfo.name;
-        body["amount"] = {};
-        body["amount"]["value"] = 11340;
-        body["amount"]["currency"] = "YER"
+        Body["customerInfo"]["id"] = order.customerInfo.open_id;
+        Body["customerInfo"]["name"] = order.customerInfo.name;
+        Body["amount"] = {};
+        Body["amount"]["value"] = 11340;
+        Body["amount"]["currency"] = "YER"
 
-        body["orderId"] = orderId;
-        body["orderDetails"] = {}
-        body["orderDetails"]["Id"] = orderId;
-        body["orderDetails"]["Products"] = []
-        body["orderDetails"]["Products"][0] = {}
-        body["orderDetails"]["Products"][0]["Product"] = "APPLE GIFT CARD $10"
-        body["orderDetails"]["Products"][0]["Type"] = "Code"
-        body["orderDetails"]["Products"][0]["Price"] = 5400
-        body["orderDetails"]["Products"][0]["Qty"] = 1
-        body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400
-        body["orderDetails"]["Products"][1] = {}
-        body["orderDetails"]["Products"][1]["Product"] = "PUBG 60 UC"
-        body["orderDetails"]["Products"][1]["Type"] = "Code"
-        body["orderDetails"]["Products"][1]["Price"] = 660
-        body["orderDetails"]["Products"][1]["Qty"] = 9
-        body["orderDetails"]["Products"][1]["SubTotalPrice"] = 5940
-        body["orderDetails"]["Currency"] = 'YER';
-        body["orderDetails"]["TotalPrice"] = 11340;
+        Body["orderId"] = orderId;
+        Body["orderDetails"] = {}
+        Body["orderDetails"]["Id"] = orderId;
+        Body["orderDetails"]["Products"] = []
+        Body["orderDetails"]["Products"][0] = {}
+        Body["orderDetails"]["Products"][0]["Product"] = "APPLE GIFT CARD $10"
+        Body["orderDetails"]["Products"][0]["Type"] = "Code"
+        Body["orderDetails"]["Products"][0]["Price"] = 5400
+        Body["orderDetails"]["Products"][0]["Qty"] = 1
+        Body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400
+        Body["orderDetails"]["Products"][1] = {}
+        Body["orderDetails"]["Products"][1]["Product"] = "PUBG 60 UC"
+        Body["orderDetails"]["Products"][1]["Type"] = "Code"
+        Body["orderDetails"]["Products"][1]["Price"] = 660
+        Body["orderDetails"]["Products"][1]["Qty"] = 9
+        Body["orderDetails"]["Products"][1]["SubTotalPrice"] = 5940
+        Body["orderDetails"]["Currency"] = 'YER';
+        Body["orderDetails"]["TotalPrice"] = 11340;
 
         let sign
         try {
             console.log("MKEY :", MKEY);
             //atob("R0Biem8wOUIySkJxNGd6cQ==")
-            sign = await BasChecksum.generateSignature(JSON.stringify(body), MKEY);
+            sign = await BasChecksum.generateSignature(Body, MKEY);
             // await paytmChecksum.then(function (result) {
             console.log("generateSignature Returns: " + sign);
             //     sign = result
-            var verifyChecksum = BasChecksum.verifySignature(JSON.stringify(body), MKEY, result);
+            var verifyChecksum = BasChecksum.verifySignature(Body, MKEY, sign);
             console.log("verifySignature Returns: " + verifyChecksum);
             // }).catch(function (error) {
             //     console.log(error);
@@ -171,13 +171,14 @@ async function initPayment(order) {
             console.log("Error :", error);
         }
         console.log("signature :", sign);
-        head["signature"] = sign;
-        head["requestTimestamp"] = requestTimestamp;
+        Head["signature"] = sign;
+        Head["requestTimestamp"] = requestTimestamp;
 
         console.log("initPayment myHeaders:", myHeaders)
-        var params = {
-            head, body
-        }
+        var params = {}
+        params['Body'] = Body
+        params['Head'] = Head
+
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -195,7 +196,7 @@ async function initPayment(order) {
 
 async function paymentStatus(orderId) {
     console.log("initPayment order:", order)
-    if (order) {
+    if (orderId) {
         var myHeaders = new Headers();
         const requestTimestamp = Date.now()
         myHeaders.append("Content-Type", "application/json");
