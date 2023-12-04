@@ -81,7 +81,7 @@ class BasChecksum {
 		Object.keys(params).sort().forEach(function (key, value) {
 			console.log('====== getStringByParams key:', key)
 			if (params[key] !== null && typeof params[key] !== 'undefined') {
-				data[key] = params[key].toLowerCase() !== "null" ? params[key] : "";
+				data[key] = params[key] !== "null" ? params[key] : "";
 			} else {
 				data[key] = "";
 			}
