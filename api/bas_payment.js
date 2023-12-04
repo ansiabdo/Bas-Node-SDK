@@ -65,7 +65,7 @@ async function initPayment(order) {
     console.log("initPayment order:", order)
     if (order) {
         var myHeaders = new Headers();
-        const requestTimestamp = Date.now()
+        const requestTimestamp = "1701717164440"// Date.now()
         myHeaders.append("Content-Type", "application/json");
 
         const orderId = generateOrderId();
@@ -126,13 +126,13 @@ async function initPayment(order) {
         var Head = {}
         var Body = {}
         Body["appId"] = APPID;
-        Body["requestTimestamp"] = requestTimestamp.toString()
+        Body["requestTimestamp"] = requestTimestamp
         Body["orderType"] = "PayBill";
         Body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
         Body["customerInfo"] = {};
 
-        Body["customerInfo"]["id"] = order.customerInfo.open_id.trim();
-        Body["customerInfo"]["name"] = order.customerInfo.name.trim();
+        Body["customerInfo"]["id"] = "75b32f99-5fe6-496f-8849-a5dedeb0a65f"//order.customerInfo.open_id.trim();
+        Body["customerInfo"]["name"] = "Abdullah AlAnsi"//order.customerInfo.name.trim();
         Body["amount"] = {};
         Body["amount"]["value"] = "11340";
         Body["amount"]["currency"] = "YER"
@@ -156,21 +156,24 @@ async function initPayment(order) {
         Body["orderDetails"]["Currency"] = 'YER';
         Body["orderDetails"]["TotalPrice"] = 11340.0;
 
-        var sign
-        var tmp;
+        var sign1 = "FlSOENtqaNzZoFm5p7SpuzkCbbV2BHS0aNqPHbSlmKORKLtKFC1ZtIHbUyawBPFhDIQhcnZUGfsYntSSn7efBSAPvINO9iz4rOvCne7MbwE="
+        var tmp = `{"appId":"4bcb8478-cdf0-488d-ad42-00f7ffdc3d88","requestTimestamp":"1701717164440","orderType":"PayBill","callBackUrl":"null","customerInfo":{"id":"75b32f99-5fe6-496f-8849-a5dedeb0a65f","name":"Abdullah AlAnsi"},"amount":{"value":"11340","currency":"YER"},"orderId":"1111855891","orderDetails":{"Id":"1111855891","Products":[{"Product":"APPLE GIFT CARD $10","Type":"Code","Price":5400,"Qty":1,"SubTotalPrice":5400},{"Product":"PUBG 60 UC","Type":"Code","Price":660,"Qty":9,"SubTotalPrice":5940}],"Currency":"YER","TotalPrice":11340}}`;
+        var sign2;
         try {
             console.log("MKEY :", MKEY);
-            tmp = JSON.stringify(Body).trim().replace(regex, "")
-            sign = await BasChecksum.generateSignature(tmp, MKEY);
-            console.log("generateSignature Returns: " + sign);
-            var verifyChecksum = BasChecksum.verifySignature(tmp, MKEY, sign);
-            console.log("verifySignature Returns: " + verifyChecksum);
+            //  tmp = JSON.stringify(Body).trim().replace(regex, "")
+            sign2 = await BasChecksum.generateSignatureByString(tmp, MKEY);
+            console.log("generateSignature sign1: ", sign1);
+            console.log("generateSignature sign2: ", sign2);
+            var verifyChecksum = BasChecksum.verifySignature(tmp, MKEY, sign1);
+            console.log("verifySignature Returns: ", verifyChecksum);
         } catch (error) {
             console.log("Error :", error);
         }
-        console.log("Signature :", sign);
-        Head["Signature"] = sign;
-        Head["RequestTimeStamp"] = requestTimestamp; 
+        console.log("Signature :", sign1);
+        console.log("cpmpare :", JSON.stringify(Body).trim().replace(regex, "") == tmp);
+        Head["Signature"] = sign1;
+        Head["RequestTimeStamp"] = requestTimestamp;
         params['Body'] = Body
         params['Head'] = Head
 
