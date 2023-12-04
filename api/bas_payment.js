@@ -104,11 +104,12 @@ async function initPayment(order) {
         let sign
         try {
             console.log("MKEY :", MKEY);
-            var paytmChecksum = BasChecksum.generateSignature(JSON.stringify(body), MKEY);
+            //atob("R0Biem8wOUIySkJxNGd6cQ==")
+            var paytmChecksum = BasChecksum.generateSignature(JSON.stringify(body), atob(MKEY));
             paytmChecksum.then(function (result) {
                 console.log("generateSignature Returns: " + result);
                 sign = result
-                var verifyChecksum = BasChecksum.verifySignature(JSON.stringify(body), MKEY, result);
+                var verifyChecksum = BasChecksum.verifySignature(JSON.stringify(body), atob(MKEY), result);
                 console.log("verifySignature Returns: " + verifyChecksum);
             }).catch(function (error) {
                 console.log(error);
