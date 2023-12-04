@@ -60,7 +60,7 @@ async function initPayment(order) {
         var head = {}
         var body = {
             "appId": APPID,
-            "requestTimestamp": requestTimestamp,
+            "requestTimestamp": requestTimestamp.toString(),
             "orderType": "PayBill",
             "callBackUrl": CALLBACKURL + `/${orderId}`,
             "customerInfo": {
@@ -68,11 +68,45 @@ async function initPayment(order) {
                 name: order.customerInfo.name
             },
             "amount": {
-                "value": 1100.0,
+                "value": "1100",
                 "currency": "YER"
             },
             "orderId": orderId,
-            orderDetails: order.orderDetails
+            orderDetails: {
+                "Id": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
+                "Products": [
+                    {
+                        "Product": "APPLE GIFT CARD $10",
+                        "Type": "Code",
+                        "Price": 5400.0,
+                        "Qty": 1,
+                        "SubTotalPrice": 5400.0
+                    },
+                    {
+                        "Product": "PUBG 60 UC",
+                        "Type": "Code",
+                        "Price": 660.0,
+                        "Qty": 9,
+                        "SubTotalPrice": 5940.0
+                    },
+                    {
+                        "Product": "APPLE GIFT CARD $40",
+                        "Type": "Code",
+                        "Price": 23400.0,
+                        "Qty": 1,
+                        "SubTotalPrice": 23400.0
+                    },
+                    {
+                        "Product": "PUBG 660 UC",
+                        "Type": "Code",
+                        "Price": 6120.0,
+                        "Qty": 2,
+                        "SubTotalPrice": 12240.0
+                    }
+                ],
+                "Currency": "YER",
+                "TotalPrice": 46980.0
+            } //order.orderDetails
         }
 
         let sign
