@@ -165,8 +165,8 @@ async function initPayment(order) {
             sign2 = await BasChecksum.generateSignatureByString(tmp, MKEY);
             console.log("generateSignature sign1: ", sign1);
             console.log("generateSignature sign2: ", sign2);
-            var verifyChecksum = BasChecksum.verifySignature(tmp, MKEY, sign1);
-            console.log("verifySignature Returns: ", verifyChecksum);
+            // var verifyChecksum = BasChecksum.verifySignature(tmp, MKEY, sign1);
+            // console.log("verifySignature Returns: ", verifyChecksum);
         } catch (error) {
             console.log("Error :", error);
         }
