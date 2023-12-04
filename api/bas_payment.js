@@ -71,7 +71,8 @@ async function initPayment(order) {
                 "value": "1100",
                 "currency": "YER"
             },
-            "orderId": orderId,
+            // "orderId": orderId,
+            "OrderId": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
             orderDetails: {
                 "Id": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
                 "Products": [
