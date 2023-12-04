@@ -78,9 +78,7 @@ async function initPayment(order) {
         let sign
         try {
             console.log("MKEY :", MKEY);
-            sign = genchecksumbystring(JSON.stringify(params), MKEY, function (value) {
-
-            })
+            sign = await genchecksumbystring(JSON.stringify(params), MKEY)
         } catch (error) {
             console.log("Error :", error);
         }

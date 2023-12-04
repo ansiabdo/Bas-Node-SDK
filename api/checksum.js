@@ -41,18 +41,40 @@ function genchecksum(params, key, cb) {
   });
 }
 
-function genchecksumbystring(params, key, cb) {
+function genchecksumbystring(params, key) {
+  console.log(`============ genchecksumbystring()==== \n${key}\n${params} `)
+  return new Promise((resolve, reject) => {
+    try {
+      crypt.gen_salt(4, function (err, salt) {
+        var sha256 = createHash('sha256').update(params + '|' + salt).digest('hex');
+        var check_sum = sha256 + salt;
+        var encrypted = crypt.encrypt(check_sum, key);
 
-  crypt.gen_salt(4, function (err, salt) {
-    var sha256 = createHash('sha256').update(params + '|' + salt).digest('hex');
-    var check_sum = sha256 + salt;
-    var encrypted = crypt.encrypt(check_sum, key);
+        var CHECKSUMHASH = encodeURIComponent(encrypted);
+        CHECKSUMHASH = encrypted;
+        resolve(CHECKSUMHASH)
+        // cb(undefined, CHECKSUMHASH);
+      });
+    } catch (error) {
+      console.error(`ERROR :${error}`)
+      reject(error)
+    }
 
-    var CHECKSUMHASH = encodeURIComponent(encrypted);
-    CHECKSUMHASH = encrypted;
-    cb(undefined, CHECKSUMHASH);
-  });
+  })
 }
+
+// function genchecksumbystring(params, key, cb) {
+
+//   crypt.gen_salt(4, function (err, salt) {
+//     var sha256 = createHash('sha256').update(params + '|' + salt).digest('hex');
+//     var check_sum = sha256 + salt;
+//     var encrypted = crypt.encrypt(check_sum, key);
+
+//     var CHECKSUMHASH = encodeURIComponent(encrypted);
+//     CHECKSUMHASH = encrypted;
+//     cb(undefined, CHECKSUMHASH);
+//   });
+// }
 
 function verifychecksum(params, key) {
   var data = paramsToString(params, false);
