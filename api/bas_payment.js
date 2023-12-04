@@ -68,69 +68,101 @@ async function initPayment(order) {
         myHeaders.append("Content-Type", "application/json");
 
         const orderId = generateOrderId();
+        // var body = {
+        //     "appId": APPID,
+        //     "requestTimestamp": requestTimestamp.toString(),
+        //     "orderType": "PayBill",
+        //     "callBackUrl": CALLBACKURL + `/${orderId}`,
+        //     "customerInfo": {
+        //         id: order.customerInfo.open_id,
+        //         name: order.customerInfo.name
+        //     },
+        //     "amount": {
+        //         "value": "1100",
+        //         "currency": "YER"
+        //     },
+        //     // "orderId": orderId,
+        //     "OrderId": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
+        //     orderDetails: {
+        //         "Id": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
+        //         "Products": [
+        //             {
+        //                 "Product": "APPLE GIFT CARD $10",
+        //                 "Type": "Code",
+        //                 "Price": 5400.0,
+        //                 "Qty": 1,
+        //                 "SubTotalPrice": 5400.0
+        //             },
+        //             {
+        //                 "Product": "PUBG 60 UC",
+        //                 "Type": "Code",
+        //                 "Price": 660.0,
+        //                 "Qty": 9,
+        //                 "SubTotalPrice": 5940.0
+        //             },
+        //             {
+        //                 "Product": "APPLE GIFT CARD $40",
+        //                 "Type": "Code",
+        //                 "Price": 23400.0,
+        //                 "Qty": 1,
+        //                 "SubTotalPrice": 23400.0
+        //             },
+        //             {
+        //                 "Product": "PUBG 660 UC",
+        //                 "Type": "Code",
+        //                 "Price": 6120.0,
+        //                 "Qty": 2,
+        //                 "SubTotalPrice": 12240.0
+        //             }
+        //         ],
+        //         "Currency": "YER",
+        //         "TotalPrice": 46980.0
+        //     } //order.orderDetails
+        // }
+
         var head = {}
-        var body = {
-            "appId": APPID,
-            "requestTimestamp": requestTimestamp.toString(),
-            "orderType": "PayBill",
-            "callBackUrl": CALLBACKURL + `/${orderId}`,
-            "customerInfo": {
-                id: order.customerInfo.open_id,
-                name: order.customerInfo.name
-            },
-            "amount": {
-                "value": "1100",
-                "currency": "YER"
-            },
-            // "orderId": orderId,
-            "OrderId": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
-            orderDetails: {
-                "Id": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
-                "Products": [
-                    {
-                        "Product": "APPLE GIFT CARD $10",
-                        "Type": "Code",
-                        "Price": 5400.0,
-                        "Qty": 1,
-                        "SubTotalPrice": 5400.0
-                    },
-                    {
-                        "Product": "PUBG 60 UC",
-                        "Type": "Code",
-                        "Price": 660.0,
-                        "Qty": 9,
-                        "SubTotalPrice": 5940.0
-                    },
-                    {
-                        "Product": "APPLE GIFT CARD $40",
-                        "Type": "Code",
-                        "Price": 23400.0,
-                        "Qty": 1,
-                        "SubTotalPrice": 23400.0
-                    },
-                    {
-                        "Product": "PUBG 660 UC",
-                        "Type": "Code",
-                        "Price": 6120.0,
-                        "Qty": 2,
-                        "SubTotalPrice": 12240.0
-                    }
-                ],
-                "Currency": "YER",
-                "TotalPrice": 46980.0
-            } //order.orderDetails
-        }
+        var body = {}
+        body["appId"] = APPID;
+        body["requestTimestamp"] = requestTimestamp.toString();
+        body["orderType"] = "PayBill";
+        body["callBackUrl"] = CALLBACKURL + `/${orderId}`;
+        body["customerInfo"] = {};
+
+        body["customerInfo"]["id"] = order.customerInfo.open_id;
+        body["customerInfo"]["name"] = order.customerInfo.name;
+        body["amount"] = {};
+        body["amount"]["value"] = "1100";
+        body["amount"]["currency"] = "YER"
+
+        body["orderId"] = orderId;
+        body["orderDetails"] = {}
+        body["orderDetails"]["Id"] = orderId;
+        body["orderDetails"]["Products"] = []
+        body["orderDetails"]["Products"][0] = {}
+        body["orderDetails"]["Products"][0]["Product"] = "APPLE GIFT CARD $10"
+        body["orderDetails"]["Products"][0]["Type"] = "Code"
+        body["orderDetails"]["Products"][0]["Price"] = 5400.0
+        body["orderDetails"]["Products"][0]["Qty"] = 1
+        body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400.0
+        body["orderDetails"]["Products"][1] = {}
+        body["orderDetails"]["Products"][1]["Product"] = "PUBG 60 UC"
+        body["orderDetails"]["Products"][1]["Type"] = "Code"
+        body["orderDetails"]["Products"][1]["Price"] = 660.0
+        body["orderDetails"]["Products"][1]["Qty"] = 9
+        body["orderDetails"]["Products"][1]["SubTotalPrice"] = 5940.0
+        body["Currency"] = 'YER';
+        body["TotalPrice"] = 11340.0;
 
         let sign
         try {
             console.log("MKEY :", MKEY);
             //atob("R0Biem8wOUIySkJxNGd6cQ==")
-            sign = await BasChecksum.generateSignature(JSON.stringify(body), atob(MKEY));
+            sign = await BasChecksum.generateSignature(JSON.stringify(body), MKEY);
             // await paytmChecksum.then(function (result) {
             console.log("generateSignature Returns: " + sign);
             //     sign = result
-            //     var verifyChecksum = BasChecksum.verifySignature(JSON.stringify(body), atob(MKEY), result);
-            //     console.log("verifySignature Returns: " + verifyChecksum);
+            var verifyChecksum = BasChecksum.verifySignature(JSON.stringify(body), MKEY, result);
+            console.log("verifySignature Returns: " + verifyChecksum);
             // }).catch(function (error) {
             //     console.log(error);
             // });
@@ -169,60 +201,10 @@ async function paymentStatus(orderId) {
         myHeaders.append("Content-Type", "application/json");
 
         const orderId = generateOrderId();
-        var head = {}
-        var body = {
-            "appId": APPID,
-            "requestTimestamp": requestTimestamp.toString(),
-            "orderType": "PayBill",
-            "callBackUrl": CALLBACKURL + `/${orderId}`,
-            "customerInfo": {
-                id: order.customerInfo.open_id,
-                name: order.customerInfo.name
-            },
-            "amount": {
-                "value": "1100",
-                "currency": "YER"
-            },
-            // "orderId": orderId,
-            "OrderId": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
-            orderDetails: {
-                "Id": "3a9b385b-c30b-4cd3-9b0e-e5887eda47b0",
-                "Products": [
-                    {
-                        "Product": "APPLE GIFT CARD $10",
-                        "Type": "Code",
-                        "Price": 5400.0,
-                        "Qty": 1,
-                        "SubTotalPrice": 5400.0
-                    },
-                    {
-                        "Product": "PUBG 60 UC",
-                        "Type": "Code",
-                        "Price": 660.0,
-                        "Qty": 9,
-                        "SubTotalPrice": 5940.0
-                    },
-                    {
-                        "Product": "APPLE GIFT CARD $40",
-                        "Type": "Code",
-                        "Price": 23400.0,
-                        "Qty": 1,
-                        "SubTotalPrice": 23400.0
-                    },
-                    {
-                        "Product": "PUBG 660 UC",
-                        "Type": "Code",
-                        "Price": 6120.0,
-                        "Qty": 2,
-                        "SubTotalPrice": 12240.0
-                    }
-                ],
-                "Currency": "YER",
-                "TotalPrice": 46980.0
-            } //order.orderDetails
-        }
 
-        let sign
+
+
+        var sign
         try {
             console.log("MKEY :", MKEY);
             //atob("R0Biem8wOUIySkJxNGd6cQ==")
@@ -231,7 +213,7 @@ async function paymentStatus(orderId) {
             console.log("generateSignature Returns: " + sign);
             //     sign = result
             var verifyChecksum = await BasChecksum.verifySignature(body, MKEY, result);
-            //     console.log("verifySignature Returns: " + verifyChecksum);
+            console.log("verifySignature Returns: " + verifyChecksum);
             // }).catch(function (error) {
             //     console.log(error);
             // });
