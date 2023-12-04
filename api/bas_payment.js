@@ -16,7 +16,7 @@ const CALLBACKURL = process.env.CALL_BACK_API_URL
 
 const generateOrderId = () => {
     // Logic to generate a unique order ID (you can use a library or custom logic)
-    return 'ORDER_' + Math.floor(Math.random() * 1000000);
+    return '1111' + Math.floor(Math.random() * 1000000);
 };
 
 router.post('/checkout', async (req, res) => {
@@ -123,15 +123,15 @@ async function initPayment(order) {
         var head = {}
         var body = {}
         body["appId"] = APPID;
-        body["requestTimestamp"] = requestTimestamp.toString();
+        body["requestTimestamp"] = requestTimestamp
         body["orderType"] = "PayBill";
-        body["callBackUrl"] = CALLBACKURL + `/${orderId}`;
+        body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
         body["customerInfo"] = {};
 
         body["customerInfo"]["id"] = order.customerInfo.open_id;
         body["customerInfo"]["name"] = order.customerInfo.name;
         body["amount"] = {};
-        body["amount"]["value"] = "1100";
+        body["amount"]["value"] = 11340;
         body["amount"]["currency"] = "YER"
 
         body["orderId"] = orderId;
@@ -141,17 +141,17 @@ async function initPayment(order) {
         body["orderDetails"]["Products"][0] = {}
         body["orderDetails"]["Products"][0]["Product"] = "APPLE GIFT CARD $10"
         body["orderDetails"]["Products"][0]["Type"] = "Code"
-        body["orderDetails"]["Products"][0]["Price"] = 5400.0
+        body["orderDetails"]["Products"][0]["Price"] = 5400
         body["orderDetails"]["Products"][0]["Qty"] = 1
-        body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400.0
+        body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400
         body["orderDetails"]["Products"][1] = {}
         body["orderDetails"]["Products"][1]["Product"] = "PUBG 60 UC"
         body["orderDetails"]["Products"][1]["Type"] = "Code"
-        body["orderDetails"]["Products"][1]["Price"] = 660.0
+        body["orderDetails"]["Products"][1]["Price"] = 660
         body["orderDetails"]["Products"][1]["Qty"] = 9
-        body["orderDetails"]["Products"][1]["SubTotalPrice"] = 5940.0
-        body["Currency"] = 'YER';
-        body["TotalPrice"] = 11340.0;
+        body["orderDetails"]["Products"][1]["SubTotalPrice"] = 5940
+        body["orderDetails"]["Currency"] = 'YER';
+        body["orderDetails"]["TotalPrice"] = 11340;
 
         let sign
         try {
