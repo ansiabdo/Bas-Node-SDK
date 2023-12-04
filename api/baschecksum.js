@@ -1,36 +1,73 @@
 "use strict";
 
-var crypto = require('crypto');
-
+const crypto = require('crypto');
+const Rijndael = require('rijndael-js');
+const padder = require('pkcs7-padding');
 class BasChecksum {
 
 	static encrypt(input, key) {
-		console.log("========= input, Key:", input, key)
+		console.log("=========192 input, Key:", input, key)
 		try {
+			const plainText = Buffer.from(input, 'utf8');
+			//Pad plaintext before encryption
+			const padded = padder.pad(plainText, 24); //Use 32 = 256 bits block sizes
 
-			var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
-			var encrypted = cipher.update(input, 'binary', 'base64');
-			console.log("========= encrypted:", encrypted)
-			encrypted += cipher.final('base64');
-			console.log("========= encrypted + cipher.final('base64'):", encrypted)
+			const key = Buffer.from(key, "utf8"); //32 bytes key length
+			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
+			console.log("=========192 key , iv:", key, iv)
+
+			const cipher = new Rijndael(key, 'cbc'); //CBC mode
+			const encrypted = cipher.encrypt(padded, 192, iv);
+			console.log("=========192 encrypted:", encrypted)
+			console.log("=========192 encrypted-base64:", encrypted.toString("base64"))
+
 			return encrypted;
 		} catch (error) {
-			console.log("========= Error192:", error)
+			console.log("=========192 Error192:", error)
 
 		}
 	}
+	// static encrypt(input, key) {
+	// 	console.log("========= input, Key:", input, key)
+	// 	try {
+	// 		var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
+	// 		var encrypted = cipher.update(input, 'binary', 'base64');
+	// 		console.log("========= encrypted:", encrypted)
+	// 		encrypted += cipher.final('base64');
+	// 		console.log("========= encrypted + cipher.final('base64'):", encrypted)
+	// 		return encrypted;
+	// 	} catch (error) {
+	// 		console.log("========= Error192:", error)
+
+	// 	}
+	// }
 
 	static encrypt128(input, key) {
 		key = atob(key)
-		console.log("========= input, Key:", input, key)
+		console.log("=========128 input, Key:", input, key)
 		try {
 
-			var cipher128 = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
-			var encrypted128 = cipher128.update(input, 'binary', 'base64');
-			console.log("========= encrypted128:", encrypted128)
-			encrypted128 += cipher128.final('base64');
-			console.log("========= encrypted128 + cipher.final('base64'):", encrypted128)
-			return encrypted128;
+			const plainText = Buffer.from(input, 'utf8');
+			//Pad plaintext before encryption
+			const padded = padder.pad(plainText, 16); //Use 32 = 256 bits block sizes
+
+			const key = Buffer.from(key, "utf8"); //32 bytes key length
+			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
+			console.log("=========128 key , iv:", key, iv)
+
+			const cipher = new Rijndael(key, 'cbc'); //CBC mode
+			const encrypted = cipher.encrypt(padded, 128, iv);
+			console.log("=========128 encrypted:", encrypted)
+			console.log("=========128 encrypted-base64:", encrypted.toString("base64"))
+
+			return encrypted;
+
+			// var cipher128 = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
+			// var encrypted128 = cipher128.update(input, 'binary', 'base64');
+			// console.log("========= encrypted128:", encrypted128)
+			// encrypted128 += cipher128.final('base64');
+			// console.log("========= encrypted128 + cipher.final('base64'):", encrypted128)
+			// return encrypted128;
 		} catch (error) {
 			console.log("========= Error128:", error)
 
