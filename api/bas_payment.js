@@ -121,6 +121,10 @@ async function initPayment(order) {
         //     } //order.orderDetails
         // }
 
+        var params = {}
+        params['Body'] = 'BBODYY'
+        params['Head'] = 'HHEADD'
+
         var Head = {}
         var Body = {}
         Body["appId"] = APPID;
@@ -169,23 +173,21 @@ async function initPayment(order) {
         console.log("Signature :", sign);
         Head["Signature"] = sign;
         Head["RequestTimeStamp"] = requestTimestamp;
-
-        console.log("initPayment myHeaders:", myHeaders)
-        var params = {}
-        params['Body'] = tmp
-        params['Head'] = Head
+        var newParams = JSON.stringify(params)
+        newParams = newParams.replace('BBODYY', tmp)
+        newParams = newParams.replace('HHEADD', JSON.stringify(Head))
 
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: JSON.stringify(params),
+            body: newParams,
             redirect: 'follow'
         };
 
         var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
         console.log("url :", url);
-        console.log("params :", JSON.stringify(params));
+        console.log("params :", params);
         return await fetch(url, requestOptions)
     }
 }
