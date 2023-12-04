@@ -6,7 +6,7 @@ class BasChecksum {
 
 	static encrypt(input, key) {
 		console.log("========= input, Key:", input, key)
-		var cipher = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
+		var cipher = crypto.createCipheriv('AES-256-CBC', key, BasChecksum.iv);
 		var encrypted = cipher.update(input, 'binary', 'base64');
 		console.log("========= encrypted:", encrypted)
 		encrypted += cipher.final('base64');
@@ -14,7 +14,7 @@ class BasChecksum {
 		return encrypted;
 	}
 	static decrypt(encrypted, key) {
-		var decipher = crypto.createDecipheriv('AES-128-CBC', key, BasChecksum.iv);
+		var decipher = crypto.createDecipheriv('AES-256-CBC', key, BasChecksum.iv);
 		var decrypted = decipher.update(encrypted, 'base64', 'binary');
 		try {
 			decrypted += decipher.final('binary');
@@ -99,9 +99,9 @@ class BasChecksum {
 	static calculateChecksum(params, key, salt) {
 		var hashString = BasChecksum.calculateHash(params, salt);
 		console.log(`========== calculateChecksum() hashString\n${hashString}`)
-		return BasChecksum.encrypt(hashString + salt, key);
+		return BasChecksum.encrypt(hashString, key);
 	}
 }
-// BasChecksum.iv = '@@@@&&&&####$$$$';
-BasChecksum.iv = 'dddd888855556666';
+BasChecksum.iv = '@@@@&&&&####$$$$';
+// BasChecksum.iv = 'dddd888855556666';
 module.exports = BasChecksum;
