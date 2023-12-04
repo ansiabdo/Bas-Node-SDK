@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documet</title>
+    <!-- <script type="module" id="sdk" src="./clientsdk.js"></script> -->
+    <script type = "text/javascript" src="./client/clientsdk.js"></script>
+    <script type = "text/javascript" src="./config/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+
+</head>
+<body>
+   
+    <br>
+    <br>
+    <center>
+            <button onclick='getAuthCode()' >BasGate Auth</button>
+            <button onclick='processPayment()' >BasGate Payment</button>
+            <button onclick='checkPayment()' >BasGate Status</button>
+    </center>
+</body>
+</html>
+ <script>
+    var authInfo;
+    var access_token='';
+    var userInfo={}
+    async function getAuthCode(){
+        console.log("====== getAuthCode() ===========");
+        let user = document.createElement("h6");
+        try {
+            authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then(async (result)=>{
+                try {
+                    let div = document.createElement("div");
+                    let heading1 = document.createElement("h6");
+                    heading1.innerText = `Auth Data :\n${JSON.stringify(result?.data)}`;
+                    div.appendChild(heading1)
+                    document.body.appendChild(div);
+                    try {
+                    await getUserInfo(result?.data?.authId).then((u)=>{
+                        userInfo=u.data
+                        access_token=result.access_token
+                        console.log("userInfo :",JSON.stringify(u));
+                        user.innerText = `User Data :\n${JSON.stringify(u.data)}`;
+                        document.body.appendChild(user);
+                    });
+                    
+                    } catch (error) {
+                        console.log("ERROR 3:",error);
+                        return {}
+                    }   
+                    // return result
+                } catch (error) {
+                    console.log("ERROR :", error)
+                    return {}
+                }
+            });
+
+            // if(authInfo)
+            // {
+                
+            // }else{
+            //     user.innerText = `authInfo :${authInfo}`;
+            // }
+        } catch (error) {
+            console.log("ERROR 3:",error);
+        }
+    }
+    
+    async function processPayment(){
+        console.log("===== processPayment() ======");
+        let myOrder={
+            "orderDetails": {
+                "SENDER_MOBILE": "772612217",
+                "RECEIVER_MOBILE": "711271124",
+                "PRODUCT_NAME":"IPHONE 15",
+                "PRODUCT_QTY":1,
+            },
+            "paymentProvider":"BAS_GATE",
+            "customerInfo":userInfo
+        }
+        alert(JSON.stringify(userInfo))
+        let payment = document.createElement("h6");
+        try {
+            //INFO: Check if not already loggined-in 
+            if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
+            try {
+                let paymentInfo=  await getPayment(myOrder).then(async (result)=>{
+                    alert(JSON.stringify(result))
+                    if(result && result.Status==1){
+                        console.log("paymentInfo :",JSON.stringify(result));
+                        payment.innerText = `Payment Data :\n${JSON.stringify(result)}`;
+                        document.body.appendChild(payment);
+                        await basPayment(result)
+                    }
+                });
+               
+            } catch (error) {
+                console.log("ERROR 3:",error);
+            }    
+        } catch (error) {
+            console.log("ERROR 3:",error);
+        }
+    }
+
+
+</script>

@@ -2,6 +2,7 @@
 
 // import { crypt } from './crypt.js'
 var { crypt } = require('./crypt');
+var crypto = require('crypto');
 
 
 //mandatory flag: when it set, only mandatory parameters are added to checksum
@@ -33,7 +34,7 @@ function paramsToString(params, mandatoryflag) {
 function genchecksum(params, key, cb) {
   var data = paramsToString(params);
   crypt.gen_salt(4, function (err, salt) {
-    var sha256 = createHash('sha256').update(data + salt).digest('hex');
+    var sha256 = crypto.createHash('sha256').update(data + salt).digest('hex');
     var check_sum = sha256 + salt;
     var encrypted = crypt.encrypt(check_sum, key);
     params.CHECKSUMHASH = encrypted;
@@ -46,7 +47,7 @@ function genchecksumbystring(params, key) {
   return new Promise((resolve, reject) => {
     try {
       crypt.gen_salt(4, function (err, salt) {
-        var sha256 = createHash('sha256').update(params + '|' + salt).digest('hex');
+        var sha256 =crypto.createHash('sha256').update(params + '|' + salt).digest('hex');
         var check_sum = sha256 + salt;
         var encrypted = crypt.encrypt(check_sum, key);
 
@@ -66,7 +67,7 @@ function genchecksumbystring(params, key) {
 // function genchecksumbystring(params, key, cb) {
 
 //   crypt.gen_salt(4, function (err, salt) {
-//     var sha256 = createHash('sha256').update(params + '|' + salt).digest('hex');
+//     var sha256 =crypto.createHash('sha256').update(params + '|' + salt).digest('hex');
 //     var check_sum = sha256 + salt;
 //     var encrypted = crypt.encrypt(check_sum, key);
 
@@ -87,7 +88,7 @@ function verifychecksum(params, key) {
     var checksum = crypt.decrypt(temp, key);
     var salt = checksum.substr(checksum.length - 4);
     var sha256 = checksum.substr(0, checksum.length - 4);
-    var hash = createHash('sha256').update(data + salt).digest('hex');
+    var hash =crypto.createHash('sha256').update(data + salt).digest('hex');
     if (hash === sha256) {
       return true;
     } else {
@@ -105,7 +106,7 @@ function verifychecksumbystring(params, key, checksumhash) {
   var checksum = crypt.decrypt(checksumhash, key);
   var salt = checksum.substr(checksum.length - 4);
   var sha256 = checksum.substr(0, checksum.length - 4);
-  var hash = createHash('sha256').update(params + '|' + salt).digest('hex');
+  var hash =crypto.createHash('sha256').update(params + '|' + salt).digest('hex');
   if (hash === sha256) {
     return true;
   } else {
@@ -117,7 +118,7 @@ function verifychecksumbystring(params, key, checksumhash) {
 function genchecksumforrefund(params, key, cb) {
   var data = paramsToStringrefund(params);
   crypt.gen_salt(4, function (err, salt) {
-    var sha256 = createHash('sha256').update(data + salt).digest('hex');
+    var sha256 =crypto.createHash('sha256').update(data + salt).digest('hex');
     var check_sum = sha256 + salt;
     var encrypted = crypt.encrypt(check_sum, key);
     params.CHECKSUM = encodeURIComponent(encrypted);
