@@ -96,7 +96,8 @@ class BasChecksum {
 	}
 	static calculateChecksum(params, key, salt) {
 		var hashString = BasChecksum.calculateHash(params, salt);
-		return BasChecksum.encrypt(hashString, key);
+		console.log(`========== calculateChecksum() hashString\n${hashString}`)
+		return BasChecksum.encrypt(hashString + salt, key);
 	}
 }
 // BasChecksum.iv = '@@@@&&&&####$$$$';
