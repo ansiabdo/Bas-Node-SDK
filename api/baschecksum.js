@@ -53,14 +53,17 @@ class BasChecksum {
 
 			const key2 = Buffer.from(key, "utf8"); //32 bytes key length
 			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
-			console.log("=========128 key2 , iv:", key2, iv)
+			console.log("=========128 key2 , iv:", key2.toString("utf8"), iv.toString("utf8"))
 
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			const encrypted = cipher.encrypt(padded, 128, iv);
 			console.log("=========128 encrypted:", encrypted)
-			console.log("=========128 encrypted-base64:", Buffer.from(encrypted, "base64"))
+			var enc_uft8 = encrypted.toString("utf8")
+			var enc_base64 = enc_uft8.toString("base64")
+			console.log("=========128 encrypted-utf8:", enc_uft8)
+			console.log("=========128 encrypted-utf8-base64:", enc_base64)
 
-			return encrypted;
+			return enc_base64;
 
 			// var cipher128 = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
 			// var encrypted128 = cipher128.update(input, 'binary', 'base64');
