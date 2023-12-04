@@ -1,22 +1,13 @@
 var express = require('express');
-const { crypt } = require('./crypt.js');
+var BasChecksum = require('./baschecksum.js');
 const { genchecksumbystring } = require('./checksum.js');
-var qs = require('qs');
-// require('dotenv').config()
 var dotevnv = require("dotenv");
-// import express from 'express';
-// // const { crypt } = await import('./crypt.js');
-// import * as crypt from './crypt.js';
-// import qs from 'qs';
-// // require('dotenv').config()
-// import * as dotevnv from "dotenv";
+
 
 dotevnv.config();
 
 const router = express.Router();
 
-const CLIENTID = process.env.BAS_CLIENT_ID
-const CLIENT_SECRET = process.env.BAS_CLIENT_SECERT
 const BASURL = process.env.BAS_BASE_URL
 const APPID = process.env.BAS_APP_ID
 const MKEY = process.env.BAS_MKEY
@@ -113,7 +104,16 @@ async function initPayment(order) {
         let sign
         try {
             console.log("MKEY :", MKEY);
-            sign = await genchecksumbystring(JSON.stringify(params), MKEY)
+            var paytmChecksum = BasChecksum.generateSignature(body, MKEY);
+            paytmChecksum.then(function (result) {
+                console.log("generateSignature Returns: " + result);
+                sign = result
+                var verifyChecksum = BasChecksum.verifySignature(body, MKEY, result);
+                console.log("verifySignature Returns: " + verifyChecksum);
+            }).catch(function (error) {
+                console.log(error);
+            });
+            // sign = await genchecksumbystring(JSON.stringify(params), MKEY)
         } catch (error) {
             console.log("Error :", error);
         }
