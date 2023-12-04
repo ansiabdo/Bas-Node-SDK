@@ -5,6 +5,7 @@ var crypto = require('crypto');
 class BasChecksum {
 
 	static encrypt(input, key) {
+		console.log("========= Key:", key)
 		var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
 		var encrypted = cipher.update(input, 'binary', 'base64');
 		encrypted += cipher.final('base64');
