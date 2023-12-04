@@ -6,15 +6,33 @@ class BasChecksum {
 
 	static encrypt(input, key) {
 		console.log("========= input, Key:", input, key)
-		var cipher = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
-		var encrypted = cipher.update(input, 'binary', 'base64');
-		console.log("========= encrypted:", encrypted)
-		encrypted += cipher.final('base64');
-		console.log("========= encrypted + cipher.final('base64'):", encrypted)
-		return encrypted;
+		try {
+
+			var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
+			var encrypted = cipher.update(input, 'binary', 'base64');
+			console.log("========= encrypted:", encrypted)
+			encrypted += cipher.final('base64');
+			console.log("========= encrypted + cipher.final('base64'):", encrypted)
+			return encrypted;
+		} catch (error) {
+			console.log("========= Error192:", error)
+
+		}
+		try {
+
+			var cipher128 = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
+			var encrypted128 = cipher128.update(input, 'binary', 'base64');
+			console.log("========= encrypted128:", encrypted128)
+			encrypted128 += cipher128.final('base64');
+			console.log("========= encrypted128 + cipher.final('base64'):", encrypted128)
+			return encrypted128;
+		} catch (error) {
+			console.log("========= Error128:", error)
+
+		}
 	}
 	static decrypt(encrypted, key) {
-		var decipher = crypto.createDecipheriv('AES-128-CBC', key, BasChecksum.iv);
+		var decipher = crypto.createDecipheriv('AES-192-CBC', key, BasChecksum.iv);
 		var decrypted = decipher.update(encrypted, 'base64', 'binary');
 		try {
 			decrypted += decipher.final('binary');
