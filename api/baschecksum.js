@@ -6,13 +6,13 @@ class BasChecksum {
 
 	static encrypt(input, key) {
 		console.log("========= Key:", key)
-		var cipher = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
+		var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
 		var encrypted = cipher.update(input, 'binary', 'base64');
 		encrypted += cipher.final('base64');
 		return encrypted;
 	}
 	static decrypt(encrypted, key) {
-		var decipher = crypto.createDecipheriv('AES-128-CBC', key, BasChecksum.iv);
+		var decipher = crypto.createDecipheriv('AES-192-CBC', key, BasChecksum.iv);
 		var decrypted = decipher.update(encrypted, 'base64', 'binary');
 		try {
 			decrypted += decipher.final('binary');
