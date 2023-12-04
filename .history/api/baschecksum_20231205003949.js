@@ -58,7 +58,7 @@ class BasChecksum {
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			const encrypted = cipher.encrypt(padded, 128, iv);
 			console.log("=========128 encrypted:", encrypted)
-			console.log("=========128 encrypted-base64:", Buffer.from(encrypted, "base64"))
+			console.log("=========128 encrypted-base64:", encrypted.toString("base64"))
 
 			return encrypted;
 
