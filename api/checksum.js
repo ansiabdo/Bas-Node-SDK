@@ -1,7 +1,7 @@
 "use strict";
 
 // import { crypt } from './crypt.js'
-var crypt = require('./crypt');
+var { crypt } = require('./crypt');
 
 
 //mandatory flag: when it set, only mandatory parameters are added to checksum
