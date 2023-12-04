@@ -129,8 +129,8 @@ async function initPayment(order) {
         Body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
         Body["customerInfo"] = {};
 
-        Body["customerInfo"]["id"] = order.customerInfo.open_id;
-        Body["customerInfo"]["name"] = order.customerInfo.name;
+        Body["customerInfo"]["id"] = order.customerInfo.open_id.trim();
+        Body["customerInfo"]["name"] = order.customerInfo.name.trim();
         Body["amount"] = {};
         Body["amount"]["value"] = "11340";
         Body["amount"]["currency"] = "YER"
@@ -154,10 +154,11 @@ async function initPayment(order) {
         Body["orderDetails"]["Currency"] = 'YER';
         Body["orderDetails"]["TotalPrice"] = 11340.0;
 
-        let sign
+        var sign
+        var tmp;
         try {
             console.log("MKEY :", MKEY);
-            var tmp = JSON.stringify(Body).trim().replace(regex, "")
+            tmp = JSON.stringify(Body).trim().replace(regex, "")
             sign = await BasChecksum.generateSignature(tmp, MKEY);
             console.log("generateSignature Returns: " + sign);
             var verifyChecksum = BasChecksum.verifySignature(tmp, MKEY, sign);
@@ -171,7 +172,7 @@ async function initPayment(order) {
 
         console.log("initPayment myHeaders:", myHeaders)
         var params = {}
-        params['Body'] = Body
+        params['Body'] = tmp
         params['Head'] = Head
 
         var requestOptions = {
