@@ -12,11 +12,11 @@ class BasChecksum {
 			//Pad plaintext before encryption
 			const padded = padder.pad(plainText, 24); //Use 32 = 256 bits block sizes
 
-			const key = Buffer.from(key, "utf8"); //32 bytes key length
+			const key2 = Buffer.from(key, "utf8"); //32 bytes key length
 			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
-			console.log("=========192 key , iv:", key, iv)
+			console.log("=========192 key2 , iv:", key2, iv)
 
-			const cipher = new Rijndael(key, 'cbc'); //CBC mode
+			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			const encrypted = cipher.encrypt(padded, 192, iv);
 			console.log("=========192 encrypted:", encrypted)
 			console.log("=========192 encrypted-base64:", encrypted.toString("base64"))
@@ -51,11 +51,11 @@ class BasChecksum {
 			//Pad plaintext before encryption
 			const padded = padder.pad(plainText, 16); //Use 32 = 256 bits block sizes
 
-			const key = Buffer.from(key, "utf8"); //32 bytes key length
+			const key2 = Buffer.from(key, "utf8"); //32 bytes key length
 			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
-			console.log("=========128 key , iv:", key, iv)
+			console.log("=========128 key2 , iv:", key2, iv)
 
-			const cipher = new Rijndael(key, 'cbc'); //CBC mode
+			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			const encrypted = cipher.encrypt(padded, 128, iv);
 			console.log("=========128 encrypted:", encrypted)
 			console.log("=========128 encrypted-base64:", encrypted.toString("base64"))
