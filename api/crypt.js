@@ -1,13 +1,18 @@
 "use strict";
 
-var crypto = require('crypto');
+// var { crypto } = require('crypto');
+var crypto = require('node:crypto');
 // const {createCipheriv, createDecipheriv, randomBytes, createHash } = require('node:crypto');
 
 // var util = require('util');
 
 var crypt = {
-  iv: '@@@@&&&&####$$$$',
-
+  // iv: '@@@@&&&&####$$$$',
+  iv : crypto.randomBytes(16),
+  // iv: crypto.create([
+  //   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  //   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  // ]),
   encrypt: function (data, custom_key) {
     var iv = this.iv;
     var key = custom_key;

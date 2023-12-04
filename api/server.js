@@ -30,6 +30,7 @@ app.use(morgan('tiny')) //* Only used for print the action URL
 app.use('/auth', basAuth);
 // app.use('/api/v1', paymentInitiationRouter);
 app.use('/order', basPayment);
+app.use('/callback/:orderid', basPayment);
 
 
 const PORT = process.env.PORT || 3000;

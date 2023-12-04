@@ -28,7 +28,7 @@ const getBasAuthCode = async (clientId) => {
         {
             clientId: clientId
         }).then(function (result) {
-            alert(JSON.stringify(result))
+            // alert(JSON.stringify(result))
             console.log("getBasAuthCode Result:", JSON.stringify(result));
             if (result) {
                 return result;
