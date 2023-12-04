@@ -58,7 +58,7 @@ class BasChecksum {
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			const encrypted = cipher.encrypt(padded, 128, iv);
 			console.log("=========128 encrypted:", encrypted)
-			var str = encrypted.map(c => c.toString())
+			var str = encrypted.map(c => String.fromCharCode(c))
 			var enc_uft8 = encrypted.toString("utf8")
 			var enc_base64 = enc_uft8.toString("base64")
 			console.log("=========128 encrypted-string:", str)
@@ -182,10 +182,10 @@ class BasChecksum {
 	static calculateChecksum(params, key, salt) {
 		var hashString = BasChecksum.calculateHash(params, salt);
 		console.log(`========== calculateChecksum() hashString\n${hashString}`)
-		var enc = BasChecksum.encrypt(hashString, key);
+		// var enc = BasChecksum.encrypt(hashString, key);
 		var enc128 = BasChecksum.encrypt128(hashString, key);
 		var enc256 = BasChecksum.encrypt256(hashString, key);
-		console.log(`========== calculateChecksum() 192:\n${enc}`)
+		// console.log(`========== calculateChecksum() 192:\n${enc}`)
 		console.log(`========== calculateChecksum() 128:\n${enc128}`)
 		console.log(`========== calculateChecksum() 256:\n${enc256}`)
 
