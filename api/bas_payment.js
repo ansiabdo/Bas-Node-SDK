@@ -122,8 +122,6 @@ async function initPayment(order) {
         // }
 
         var params = {}
-        params['Body'] = 'BBODYY'
-        params['Head'] = 'HHEADD'
 
         var Head = {}
         var Body = {}
@@ -172,10 +170,13 @@ async function initPayment(order) {
         }
         console.log("Signature :", sign);
         Head["Signature"] = sign;
-        Head["RequestTimeStamp"] = requestTimestamp;
-        var newParams = JSON.stringify(params)
-        newParams = newParams.replace('BBODYY', tmp)
-        newParams = newParams.replace('HHEADD', JSON.stringify(Head))
+        Head["RequestTimeStamp"] = requestTimestamp; 
+        params['Body'] = Body
+        params['Head'] = Head
+
+        var newParams = JSON.stringify(params).trim().replace(regex, "")
+
+        console.log("newParams :", newParams);
 
         var requestOptions = {
             method: 'POST',
