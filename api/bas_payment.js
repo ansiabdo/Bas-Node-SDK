@@ -1,5 +1,6 @@
 var express = require('express');
 const { crypt } = require('./crypt.js');
+const { genchecksumbystring } = require('./checksum.js');
 var qs = require('qs');
 // require('dotenv').config()
 var dotevnv = require("dotenv");
@@ -54,18 +55,18 @@ async function initPayment(order) {
         var myHeaders = new Headers();
         const requestTimestamp = Date.now()
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("requestTimestamp", requestTimestamp);
-        console.log("initPayment myHeaders:", myHeaders)
 
-
-
-        let orderId = generateOrderId();
-        let params = {
-            "requestTimestamp": requestTimestamp,
+        const orderId = generateOrderId();
+        var head = {}
+        var body = {
             "appId": APPID,
-            "orderType": "billpayment",
+            "requestTimestamp": requestTimestamp,
+            "orderType": "PayBill",
             "callBackUrl": CALLBACKURL + `/${orderId}`,
-            "customerInfo": order.customerInfo,
+            "customerInfo": {
+                id: order.customerInfo.open_id,
+                name: order.customerInfo.name
+            },
             "amount": {
                 "value": 1100.0,
                 "currency": "YER"
@@ -77,13 +78,20 @@ async function initPayment(order) {
         let sign
         try {
             console.log("MKEY :", MKEY);
-            sign = crypt.encrypt(JSON.stringify(params), MKEY)
+            sign = genchecksumbystring(JSON.stringify(params), MKEY, function (value) {
+
+            })
         } catch (error) {
             console.log("Error :", error);
         }
         console.log("signature :", sign);
-        myHeaders.append("signature", sign);
+        head["signature"] = sign;
+        head["requestTimestamp"] = requestTimestamp;
 
+        console.log("initPayment myHeaders:", myHeaders)
+        var params = {
+            head, body
+        }
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,

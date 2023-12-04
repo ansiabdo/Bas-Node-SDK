@@ -1,10 +1,8 @@
 "use strict";
 
 // import { crypt } from './crypt.js'
-// var crypt = require('./crypt');
-// var crypto = require('crypto');
-const { createCipheriv, createDecipheriv, randomBytes, createHash } = await import('node:crypto');
-const { crypt } = await import('./crypt.js');
+var crypt = require('./crypt');
+
 
 //mandatory flag: when it set, only mandatory parameters are added to checksum
 
@@ -124,8 +122,8 @@ function paramsToStringrefund(params, mandatoryflag) {
   return data;
 }
 
-// module.exports.genchecksum = genchecksum;
-// module.exports.verifychecksum = verifychecksum;
-// module.exports.verifychecksumbystring = verifychecksumbystring;
-// module.exports.genchecksumbystring = genchecksumbystring;
-// module.exports.genchecksumforrefund = genchecksumforrefund;
+module.exports.genchecksum = genchecksum;
+module.exports.verifychecksum = verifychecksum;
+module.exports.verifychecksumbystring = verifychecksumbystring;
+module.exports.genchecksumbystring = genchecksumbystring;
+module.exports.genchecksumforrefund = genchecksumforrefund;
