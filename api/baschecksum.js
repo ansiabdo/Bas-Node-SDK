@@ -96,6 +96,6 @@ class BasChecksum {
 		return BasChecksum.encrypt(hashString, key);
 	}
 }
-BasChecksum.iv = '@@@@&&&&####$$$$';
-// BasChecksum.iv = 'dddd888855556666';
+// BasChecksum.iv = '@@@@&&&&####$$$$';
+BasChecksum.iv = 'dddd888855556666';
 module.exports = BasChecksum;
