@@ -5,14 +5,16 @@ var crypto = require('crypto');
 class BasChecksum {
 
 	static encrypt(input, key) {
-		console.log("========= Key:", key)
-		var cipher = crypto.createCipheriv('AES-192-CBC', key, BasChecksum.iv);
+		console.log("========= input, Key:", input, key)
+		var cipher = crypto.createCipheriv('AES-128-CBC', key, BasChecksum.iv);
 		var encrypted = cipher.update(input, 'binary', 'base64');
+		console.log("========= encrypted:", encrypted)
 		encrypted += cipher.final('base64');
+		console.log("========= encrypted + cipher.final('base64'):", encrypted)
 		return encrypted;
 	}
 	static decrypt(encrypted, key) {
-		var decipher = crypto.createDecipheriv('AES-192-CBC', key, BasChecksum.iv);
+		var decipher = crypto.createDecipheriv('AES-128-CBC', key, BasChecksum.iv);
 		var decrypted = decipher.update(encrypted, 'base64', 'binary');
 		try {
 			decrypted += decipher.final('binary');
