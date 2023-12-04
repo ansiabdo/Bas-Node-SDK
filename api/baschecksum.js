@@ -23,6 +23,7 @@ class BasChecksum {
 		return decrypted;
 	}
 	static generateSignature(params, key) {
+		console.log(`=========== params :${params}\nkey:${key}`)
 		if (typeof params !== "object" && typeof params !== "string") {
 			var error = "string or object expected, " + (typeof params) + " given.";
 			return Promise.reject(error);
