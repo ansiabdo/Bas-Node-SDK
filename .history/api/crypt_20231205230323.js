@@ -7,19 +7,16 @@ var crypto = require('node:crypto');
 // var util = require('util');
 
 var crypt = {
-  // iv: '@@@@&&&&####$$$$',
+  iv: '@@@@&&&&####$$$$',
   // iv : crypto.randomBytes(16),
-  iv: 'dddd888855556666',
+  // iv : 'dddd888855556666',
   // iv: Buffer.from([
   //   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   //   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   // ]),
   encrypt: function (data, custom_key) {
     var iv = this.iv;
-    // var key = custom_key;
-    const key = crypto.createHash('sha256',).update(custom_key).digest()
-
-    console.log('======== encrypt.old key:', key.length, key)
+    var key = custom_key;
     var algo = '256';
     switch (key.length) {
       case 16:
@@ -33,7 +30,7 @@ var crypt = {
         break;
 
     }
-    var cipher = crypto.createCipheriv('AES-' + algo + '-CBC', key, iv);
+    var cipher = crypto.createCipheriv('AES-' + algo + '-CBC', key, iv.toString("utf8"));
     var encrypted = cipher.update(data, 'binary', 'base64');
     encrypted += cipher.final('base64');
     return encrypted;
@@ -69,7 +66,6 @@ var crypt = {
       var salt;
       if (!err) {
         salt = buf.toString("base64");
-        salt = 'aaaa'
       }
       //salt=Math.floor(Math.random()*8999)+1000;
       cb(err, salt);

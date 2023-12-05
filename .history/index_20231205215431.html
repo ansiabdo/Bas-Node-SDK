@@ -101,32 +101,5 @@
         }
     }
 
-    
-    async function checkPayment(){
-        console.log("===== processPayment() ======");
-        let orderId='785428'
-        let paymentStatus = document.createElement("h6");
-        try {
-            //INFO: Check if not already loggined-in 
-            if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
-            try {
-                let paymentInfo=  await checkPaymentStatus(orderId).then(async (result)=>{
-                    alert(JSON.stringify(result))
-                    if(result && result.Status==1){
-                        console.log("payment status :",JSON.stringify(result));
-                        paymentStatus.innerText = `Payment status :\n${JSON.stringify(result)}`;
-                        document.body.appendChild(paymentStatus);
-                        await basPayment(result)
-                    }
-                });
-               
-            } catch (error) {
-                console.log("ERROR 3:",error);
-            }    
-        } catch (error) {
-            console.log("ERROR 3:",error);
-        }
-    }
-
 
 </script>

@@ -29,9 +29,10 @@ router.post('/checkout', async (req, res) => {
         await initPayment({ orderDetails, customerInfo }).then(async (response) => {
             console.log("response :", response.data)
             let data = response.data //await response.json()
+            console.log("response :", data)
             return res.status(200).json(data)
         }).catch((error) => {
-            let data = error?.response?.data || error || '{}'
+            let data = error?.response?.data ?? error ?? '{}'
             console.error("Error checkout:", data)
             return res.status(409).send(data)
         })
@@ -47,11 +48,11 @@ router.get('/status/:orderId', async (req, res) => {
 
     if (orderId) {
         await paymentStatus(orderId).then(async (response) => {
-            console.log("response :", response.data)
-            let data = response.data //await response.json()
+            let data = await response.json()
+            console.log("response :", data)
             return res.status(200).json(data)
         }).catch((error) => {
-            let data = error?.response?.data || error || '{}'
+            let data = error?.response?.data ?? '{}'
             console.error("Error :", data)
             return res.status(409).send(data)
         })
@@ -142,7 +143,6 @@ async function paymentStatus(orderId) {
     params.Body = {}
     params.Body["appId"] = APPID;
     params.Body["orderId"] = orderId;
-    params.Body["requestTimestamp"] = requestTimestamp.toString();
 
     var sign, bodyStr;
 
