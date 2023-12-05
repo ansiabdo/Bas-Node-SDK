@@ -30,17 +30,17 @@ class BasChecksum {
 
 	static encryptNew = function (input, key) {
 		const keySize = 256;
-		const key2 = crypto.createHash('sha256',).update(key).digest()
+		const key2 = crypto.createHash('sha256',).update(key).digest("binary")
 		console.log("============== encrypt key2:", key2)
 		console.log("============== encrypt key2:", key2.toString("binary").length)
 		const initVector = BasChecksum.iv;
-		const initVectorBytes = Buffer.from(initVector, "ascii");
-		const plainText = Buffer.from(input, "ascii");
+		const initVectorBytes = Buffer.from(initVector, "utf8");
+		// const plainText = Buffer.from(input, "ascii");
 		console.log("============== encrypt iv:", initVectorBytes)
-		console.log("============== encrypt plainText:", plainText)
+		console.log("============== encrypt input:", input)
 
 		const cipher = crypto.createCipheriv(`aes-${keySize}-cbc`, key2, initVectorBytes);
-		const output = Buffer.concat([cipher.update(input, "binary"), cipher.final()]);
+		const output = Buffer.concat([cipher.update(input, "utf8"), cipher.final()]);
 		console.log("============== encrypt output:", output)
 		console.log("============== encrypt output-base64:", output.toString('base64'))
 
@@ -69,22 +69,22 @@ class BasChecksum {
 	static encrypt128(input, key) {
 		console.log("=========128 input, Key:", input, key.toString())
 		try {
-			const keyAscii = Buffer.from(key, "ascii")
-			const plainText = Buffer.from(input, 'ascii');
+			const keyAscii = Buffer.from(key, "utf8")
+			const plainText = Buffer.from(input, 'utf8');
 			//Pad plaintext before encryption
 			const padded = padder.pad(plainText, 32); //Use 32 = 256 bits block sizes
 			console.log("=========128 keyAscii:", keyAscii)
 			console.log("=========128 plainText:", plainText)
-			const key2 = crypto.createHash('sha256',).update(keyAscii).digest()
+			const key2 = crypto.createHash('sha256',).update(keyAscii).digest("binary")
 
 			// const key2 = crypto.scryptSync(key, 'aaaa', 16)// Buffer.from(key, "utf8"); //32 bytes key length
-			const iv = Buffer.from(BasChecksum.iv, "ascii")//crypto.randomBytes(16); //32 bytes IV
+			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
 			const ivPadded = padder.pad(iv, 16); //Use 32 = 256 bits block sizes
 			console.log("=========128 key2 , iv:", key2.byteLength, key2, ivPadded.byteLength, iv.byteLength)
 
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			// const encrypted = cipher.encrypt(plainText, 256, ivPadded);
-			const encrypted = cipher.encrypt(plainText, 128, BasChecksum.iv);
+			const encrypted = cipher.encrypt(plainText, '128', BasChecksum.iv);
 			console.log("=========128 encrypted:", encrypted)
 			// var str = encrypted.map(c => String.fromCharCode(c))
 			var enc_uft8 = encrypted.toString("utf8")
