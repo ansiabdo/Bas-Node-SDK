@@ -124,7 +124,6 @@ async function initPayment(order) {
     var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
     console.log("url :", url);
-    console.log("myHeaders :", myHeaders);
     console.log("=======================newParams :", newParams);
     return await axios({
         method: 'post',

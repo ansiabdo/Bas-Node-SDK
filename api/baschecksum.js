@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const Rijndael = require('rijndael-js');
 const padder = require('pkcs7-padding');
+var AES = require('aes-js');
 class BasChecksum {
 
 	// static encrypt(input, key) {
@@ -30,7 +31,7 @@ class BasChecksum {
 
 	static encryptNew = function (input, key) {
 		const keySize = 256;
-		const key2 = crypto.createHash('sha256',).update(key).digest("binary")
+		const key2 = crypto.createHash('sha256',).update(key).digest()
 		console.log("============== encrypt key2:", key2)
 		console.log("============== encrypt key2:", key2.toString("binary").length)
 		const initVector = BasChecksum.iv;
@@ -75,7 +76,7 @@ class BasChecksum {
 			const padded = padder.pad(plainText, 32); //Use 32 = 256 bits block sizes
 			console.log("=========128 keyAscii:", keyAscii)
 			console.log("=========128 plainText:", plainText)
-			const key2 = crypto.createHash('sha256',).update(keyAscii).digest("binary")
+			const key2 = crypto.createHash('sha256',).update(keyAscii).digest()
 
 			// const key2 = crypto.scryptSync(key, 'aaaa', 16)// Buffer.from(key, "utf8"); //32 bytes key length
 			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
@@ -107,22 +108,29 @@ class BasChecksum {
 		}
 	}
 
-	// static encrypt256(input, key) {
-	// 	key = 'UjBCaWVtOHdPVUl5U2tKeE5HZDZjUT09' //atob(key)
-	// 	console.log("========= input, Key:", input, key)
-	// 	try {
 
-	// 		var cipher256 = crypto.createCipheriv('AES-256-CBC', key, BasChecksum.iv);
-	// 		var encrypted256 = cipher256.update(input, 'binary', 'base64');
-	// 		console.log("========= encrypted256:", encrypted256)
-	// 		encrypted256 += cipher256.final('base64');
-	// 		console.log("========= encrypted256 + cipher.final('base64'):", encrypted256)
-	// 		return encrypted256;
-	// 	} catch (error) {
-	// 		console.log("========= Error256:", error)
+	static encryptAES = (data, token, cipherIV) => {
+		// // Test Code:
+		// var message = 'Hello world!';
+		// var token = '01234567890123456789012345678901';
+		// var cipherIV = '0123456789012345';
+		// var result = encrypt(message, token, cipherIV);	
+		const key2 = crypto.createHash('sha256',).update(token).digest("hex")
+		const key = AES.utils.hex.toBytes(key2);
+		console.log("============ encryptAES key:", key)
+		const iv = AES.utils.utf8.toBytes(cipherIV);
+		const aesCbc = new AES.ModeOfOperation.cbc(key, iv);
+		const dataBytes = AES.utils.utf8.toBytes(data);
+		console.log("============ encryptAES dataBytes:", dataBytes)
+		const paddedData = AES.padding.pkcs7.pad(dataBytes);
+		const encryptedBytes = aesCbc.encrypt(paddedData);
+		console.log("============ encryptAES encryptedBytes:", encryptedBytes)
+		console.log("============ encryptAES encryptedBytes.toString():", encryptedBytes.toString())
+		console.log("============ encryptAES AES.utils.hex.fromBytes(encryptedBytes):", Buffer.from(encryptedBytes, "binary").toString("base64"))
+		return Buffer.from(encryptedBytes, "binary").toString("base64")
+	};
 
-	// 	}
-	// }
+
 
 	static decrypt(encrypted, key) {
 		var decipher = crypto.createDecipheriv('AES-128-CBC', key, BasChecksum.iv);
@@ -215,12 +223,14 @@ class BasChecksum {
 		// var enc = BasChecksum.encrypt(hashString, key);
 		var encNew = BasChecksum.encryptNew(hashString, key);
 		var enc128 = BasChecksum.encrypt128(hashString, key);
+		var encAES = BasChecksum.encryptAES(hashString, key, BasChecksum.iv);
 		// var enc256 = BasChecksum.encrypt256(hashString, key);
 		console.log(`========== calculateChecksum() encNew : ${encNew}`)
-		console.log(`========== calculateChecksum() 128 : ${enc128}`)
+		console.log(`========== calculateChecksum() enc128 : ${enc128}`)
+		console.log(`========== calculateChecksum() encAES : ${encAES}`)
 		// console.log(`========== calculateChecksum() 256:\n${enc256}`)
 
-		return enc128;
+		return encAES;
 	}
 }
 // BasChecksum.iv = '@@@@&&&&####$$$$';

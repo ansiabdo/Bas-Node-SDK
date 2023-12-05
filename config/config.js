@@ -12,8 +12,8 @@ var BAS_APP_ID = "4bcb8478-cdf0-488d-ad42-00f7ffdc3d88"
 // var BAS_CLIENT_SECERT = "42488bad-87f9-4b6d-9705-7e396c4f61e2"
 
 ///////// Merchant API URLS ////////////////////////
-// var BASE_URL = "http://localhost:3000"
-var BASE_URL = "https://bas-node-sdk.onrender.com"
+var BASE_URL = "http://localhost:3000"
+// var BASE_URL = "https://bas-node-sdk.onrender.com"
 var CALLBACK_URL = "https://bas-node-sdk.onrender.com/api/v1/callback"
 
 // if (BAS_ENVIORMENT == 'TEST') {
