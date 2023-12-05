@@ -28,25 +28,18 @@ class BasChecksum {
 	// 	}
 	// }
 	static encrypt(input, key) {
-		key = "R0Biem8wOUIySkJxNGd6cQ=="
+		// key = atob(key)
 		console.log("========= input, Key:", input, key)
 		try {
-			const keyAscii = Buffer.from(key, "ascii")
-			console.log('=======================key-hex ', Buffer.from(key, "base64").toString("hex"));
-			console.log('=======================keyAscii-hex ', keyAscii.toString('hex'));
-			console.log('=======================keyAscii-base64 ', keyAscii.toString('base64'));
-			console.log('=======================keyAscii-binary ', keyAscii.toString("binary"));
-			const tmp = crypto.createHash('sha256',).update(keyAscii).digest()
-			const len = Buffer.from(tmp, "hex").toString("utf8").length < 32 ? 32 - Buffer.from(tmp, "hex").toString("utf8").length : 0
-			const key2 = padder.pad(tmp, len)
-			console.log("========= Buffer.from Key ,iv :", Buffer.from(key, "utf8"), Buffer.from(BasChecksum.iv, "utf8"))
-			console.log("========= key2:", Buffer.from(key2, "hex").toString("utf8").length, Buffer.from(key2, "ascii"), Buffer.from(key2, "hex").toString("hex").length, Buffer.from(key2, "hex").toString("hex"))
-			// console.log("========= key2:", key2.toString("utf8").length, key2.toString("utf8"))
-			// console.log("========= cc ,dd:", Buffer.from(cc), Buffer.from(dd))
-			// console.log("========= cc ,dd:", Buffer.from(cc, "base64"), Buffer.from(dd, "base64"))
+			let cc = crypto.createHash('sha256').update(key).digest('hex')
+			let dd = crypto.createHash('sha256').update(Buffer.from(key, "base64").toString()).digest('hex')
+			console.log("========= Buffer.from Key ,iv :", Buffer.from(key), Buffer.from(BasChecksum.iv, "utf8"))
+			console.log("========= cc ,dd:", cc, dd)
+			console.log("========= cc ,dd:", Buffer.from(cc), Buffer.from(dd))
+			console.log("========= cc ,dd:", Buffer.from(cc, "base64"), Buffer.from(dd, "base64"))
 			// var cipher = crypto.createCipheriv('AES-128-CBC', Buffer.from(key, "base64"), BasChecksum.iv);
-			var cipher = crypto.createCipheriv('AES-128-CBC', Buffer.from(key2, "hex").toString("utf8"), Buffer.from(BasChecksum.iv, "utf8"));
-			var encrypted = cipher.update(Buffer.from(input, "base64"), "base64", 'base64');
+			var cipher = crypto.createCipheriv('AES-128-CBC', Buffer.from(key, "base64"), Buffer.from(BasChecksum.iv, "utf8"));
+			var encrypted = cipher.update(input, 'binary', 'base64');
 			console.log("========= encrypted:", encrypted)
 			encrypted += cipher.final('base64');
 			console.log("========= encrypted + cipher.final('base64'):", encrypted)
@@ -58,27 +51,20 @@ class BasChecksum {
 	}
 
 	static encrypt128(input, key) {
-		// key = atob(key)
-
-		console.log("=========128 input, Key:", input, key.toString())
+		key = atob(key)
+		console.log("=========128 input, Key:", input, key)
 		try {
 
-			const keyAscii = Buffer.from(key, "ascii")
-			const plainText = Buffer.from(input, 'ascii');
+			const plainText = Buffer.from(input, 'utf8');
 			//Pad plaintext before encryption
 			const padded = padder.pad(plainText, 16); //Use 32 = 256 bits block sizes
-			console.log("=========128 keyAscii:", keyAscii.toString("utf-8"))
-			console.log("=========128 keyAscii:", keyAscii.toString("binary"))
-			// console.log("=========128 padded-hex:", padded.toString("hex"))
-			console.log("=========128 plainText-hex:", plainText.toString("hex"))
-			const key2 = crypto.createHash('sha256',).update(keyAscii).digest()
 
-			// const key2 = crypto.scryptSync(key, 'aaaa', 16)// Buffer.from(key, "utf8"); //32 bytes key length
-			const iv = Buffer.from(BasChecksum.iv, "ascii")//crypto.randomBytes(16); //32 bytes IV
+			const key2 = Buffer.from(key, "utf8"); //32 bytes key length
+			const iv = Buffer.from(BasChecksum.iv, "utf8")//crypto.randomBytes(16); //32 bytes IV
 			console.log("=========128 key2 , iv:", key2.toString("hex"), iv.toString("hex"))
 
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
-			const encrypted = cipher.encrypt(plainText, 128, BasChecksum.iv);
+			const encrypted = cipher.encrypt(padded, 128, iv);
 			console.log("=========128 encrypted:", encrypted)
 			// var str = encrypted.map(c => String.fromCharCode(c))
 			var enc_uft8 = encrypted.toString("utf8")
@@ -204,10 +190,10 @@ class BasChecksum {
 	static calculateChecksum(params, key, salt) {
 		var hashString = BasChecksum.calculateHash(params, salt);
 		console.log(`========== calculateChecksum() hashString\n${hashString}`)
-		// var enc = BasChecksum.encrypt(hashString, key);
+		var enc = BasChecksum.encrypt(hashString, key);
 		var enc128 = BasChecksum.encrypt128(hashString, key);
 		// var enc256 = BasChecksum.encrypt256(hashString, key);
-		// console.log(`========== calculateChecksum():\n${enc}`)
+		console.log(`========== calculateChecksum():\n${enc}`)
 		console.log(`========== calculateChecksum() 128:\n${enc128}`)
 		// console.log(`========== calculateChecksum() 256:\n${enc256}`)
 
