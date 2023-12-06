@@ -41,10 +41,10 @@ class BasChecksum {
 		const iv = Buffer.from(initVector, "utf8");
 		const decipher = crypto.createCipheriv('aes-256-cbc', key2, initVector)
 		decipher.setAutoPadding(true)
-		const decrypted = decipher.update(data, null, 'base64')
-		const retData = (decrypted + decipher.final('base64')).replace(/\0*$/, '')
+		const decrypted = decipher.update(data, null, 'utf8')
+		const retData = (decrypted + decipher.final('utf8')).replace(/\0*$/, '')
 		console.log('============== encrypt25622 retData:', retData)
-		BasChecksum.decrypt25622(retData, key)
+		// BasChecksum.decrypt25622(retData, key)
 		BasChecksum.decrypt25622(encrypted, key)
 		return retData
 	}
@@ -59,13 +59,7 @@ class BasChecksum {
 		decipher.setAutoPadding(true)
 		const decrypted = decipher.update(data, null, 'utf8')
 		const retData = (decrypted + decipher.final('utf8')).replace(/\0*$/, '')
-		try {
-			// console.log('============== decrypt25622 11 btoa(retData):', Buffer.from(retData,"binary").toString("ascii"))
-			console.log('============== decrypt25622 22 retData):', (retData))
-
-		} catch (error) {
-			console.log('============== decrypt25622 00 retData:', retData)
-		}
+		console.log('============== decrypt25622 retData:', retData)
 		return retData
 	}
 
