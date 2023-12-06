@@ -22,8 +22,8 @@ class PaytmChecksum {
 		return decrypted;
 	}
 	static generateSignature(params, key) {
-		const key2 = crypto.createHash('sha256',).update(key).digest()
-
+		const key2 = crypto.scryptSync(key, 'aaaa', 32)//crypto.createHash('sha256',).update(key).digest()
+		console.log("=============== generateSignature key2:", key2)
 		if (typeof params !== "object" && typeof params !== "string") {
 			var error = "string or object expected, " + (typeof params) + " given.";
 			return Promise.reject(error);

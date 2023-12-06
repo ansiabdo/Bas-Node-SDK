@@ -118,7 +118,7 @@ async function initPayment(order) {
     // var newParams = JSON.stringify(params).trim().replace(regex, "")
     // var newParams = reqBody.replace("bodyy", JSON.stringify(JSON.parse(tmp))).replace("timess", requestTimestamp).replace("sigg", sign1)
     var newBody = JSON.stringify(params.Body).replace(regex, '').trim()
-    var newParams = reqBody.replace("bodyy", newBody).replace("timess", requestTimestamp).replace("sigg", sign2)
+    var newParams = reqBody.replace("bodyy", newBody).replace("timess", requestTimestamp).replace("sigg", sign3)
 
     var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
@@ -140,7 +140,7 @@ async function paymentStatus(orderId) {
     params.Body = {}
     params.Body["appId"] = APPID;
     params.Body["orderId"] = orderId;
-    params.Body["requestTimestamp"] = requestTimestamp.toString();
+    params.Body["requestTimestamp"] = ''// requestTimestamp.toString();
 
     var sign, bodyStr;
 
@@ -149,7 +149,9 @@ async function paymentStatus(orderId) {
         console.log("MKEY :", MKEY);
         console.log("=============== body :", bodyStr.length, bodyStr);
 
-        sign = await BasChecksum.generateSignature(bodyStr, MKEY);
+        // sign = await BasChecksum.generateSignature(bodyStr, MKEY);
+        sign = await PaytmChecksum.generateSignature(bodyStr, MKEY)
+
         console.log("=============== generateSignature sign: ", sign);
     } catch (error) {
         console.log("Error sign:", error);

@@ -237,7 +237,7 @@ class BasChecksum {
 		console.log(`========== calculateChecksum() encNew : ${encNew}`)
 		console.log(`========== calculateChecksum() enc128 : ${enc128}`)
 		console.log(`========== calculateChecksum() encAES : ${encAES}`)
-		console.log(`========== calculateChecksum() 256:\n${enc256}`)
+		console.log(`========== calculateChecksum() 256: ${enc256}`)
 
 		return encAES;
 	}
