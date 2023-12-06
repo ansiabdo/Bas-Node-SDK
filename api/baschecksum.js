@@ -39,14 +39,15 @@ class BasChecksum {
 		// const iv ='dddd888855556666' //data.slice(0, 16)
 		const initVector = BasChecksum.iv;
 		const iv = Buffer.from(initVector, "utf8");
-		const decipher = crypto.createCipheriv('aes-256-cbc', key2, initVector)
-		decipher.setAutoPadding(true)
-		const decrypted = decipher.update(data, null, 'base64')
-		const retData = (decrypted + decipher.final('base64')).replace(/\0*$/, '')
-		console.log('============== encrypt25622 retData:', retData)
-		BasChecksum.decrypt25622(retData, key)
+		const cipher = crypto.createCipheriv('aes-256-cbc', key2, initVector)
+		cipher.setAutoPadding(true)
+		let f = cipher.update(data)
+		const encryptedd = Buffer.concat([f, cipher.final()]);
+		// const retData = (encryptedd + cipher.final('base64')).replace(/\0*$/, '')
+		console.log('============== encrypt25622 encryptedd:', encryptedd.toString("base64"))
+		BasChecksum.decrypt25622(encryptedd.toString("base64"), key)
 		BasChecksum.decrypt25622(encrypted, key)
-		return retData
+		return encryptedd.toString("base64")
 	}
 
 	static decrypt25622(encrypted, key) {
@@ -56,12 +57,15 @@ class BasChecksum {
 		const initVector = BasChecksum.iv;
 		const iv = Buffer.from(initVector, "utf8");
 		const decipher = crypto.createDecipheriv('aes-256-cbc', key2, iv)
-		decipher.setAutoPadding(true)
-		const decrypted = decipher.update(data, null, 'utf8')
-		const retData = (decrypted + decipher.final('utf8')).replace(/\0*$/, '')
+		decipher.setAutoPadding(false)
+		// const decrypted = decipher.update(data, null, 'utf8')
+		// const retData = (decrypted + decipher.final('utf8')).replace(/\0*$/, '')
+		decipher.setAutoPadding(false)
+		const decrypted = decipher.update(data)
+		const retData = Buffer.concat([decrypted, decipher.final()])
 		try {
 			// console.log('============== decrypt25622 11 btoa(retData):', Buffer.from(retData,"binary").toString("ascii"))
-			console.log('============== decrypt25622 22 retData):', (retData))
+			console.log('============== decrypt25622 22 retData):', retData.toString())
 
 		} catch (error) {
 			console.log('============== decrypt25622 00 retData:', retData)
