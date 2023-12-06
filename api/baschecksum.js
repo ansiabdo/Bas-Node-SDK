@@ -29,6 +29,15 @@ class BasChecksum {
 	// 	}
 	// }
 
+	static encrypt256(input, key) {
+		const key2 = crypto.createHash('sha256',).update(key).digest()
+		var cipher = crypto.createCipheriv('AES-256-CBC', key2, BasChecksum.iv);
+		var encrypted = cipher.update(input, 'binary', 'base64');
+		encrypted += cipher.final('base64');
+		console.log("============== encrypt256 encrypted:", encrypted)
+		return encrypted;
+	}
+
 	static encryptNew = function (input, key) {
 		const keySize = 256;
 		const key2 = crypto.createHash('sha256',).update(key).digest()
@@ -85,7 +94,7 @@ class BasChecksum {
 
 			const cipher = new Rijndael(key2, 'cbc'); //CBC mode
 			// const encrypted = cipher.encrypt(plainText, 256, ivPadded);
-			const encrypted = cipher.encrypt(plainText, '128', BasChecksum.iv);
+			const encrypted = cipher.encrypt(plainText, '256', ivPadded);
 			console.log("=========128 encrypted:", encrypted)
 			// var str = encrypted.map(c => String.fromCharCode(c))
 			var enc_uft8 = encrypted.toString("utf8")
@@ -224,11 +233,11 @@ class BasChecksum {
 		var encNew = BasChecksum.encryptNew(hashString, key);
 		var enc128 = BasChecksum.encrypt128(hashString, key);
 		var encAES = BasChecksum.encryptAES(hashString, key, BasChecksum.iv);
-		// var enc256 = BasChecksum.encrypt256(hashString, key);
+		var enc256 = BasChecksum.encrypt256(hashString, key);
 		console.log(`========== calculateChecksum() encNew : ${encNew}`)
 		console.log(`========== calculateChecksum() enc128 : ${enc128}`)
 		console.log(`========== calculateChecksum() encAES : ${encAES}`)
-		// console.log(`========== calculateChecksum() 256:\n${enc256}`)
+		console.log(`========== calculateChecksum() 256:\n${enc256}`)
 
 		return encAES;
 	}

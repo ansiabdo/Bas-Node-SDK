@@ -1,5 +1,6 @@
 var express = require('express');
 var BasChecksum = require('./baschecksum.js');
+var PaytmChecksum = require('./PaytmChecksum.js');
 const { genchecksumbystring, genchecksum } = require('./checksum.js');
 var dotevnv = require("dotenv");
 const axios = require("axios")
@@ -106,10 +107,8 @@ async function initPayment(order) {
         console.log("=============== body :", bodyStr.length, bodyStr);
 
         sign2 = await BasChecksum.generateSignature(bodyStr, MKEY);
-        // sign3 = await genchecksum(bodyStr, MKEY, (value) => {
-        //     console.log("=============== genchecksum :", value);
-        // })
-        // console.log("=============== encrypt(bodyStr, MKEY) sign1: ", sign1);
+        sign3 = await PaytmChecksum.generateSignature(bodyStr, MKEY)
+        console.log("=============== encrypt(bodyStr, MKEY) sign1: ", sign1);
         console.log("=============== generateSignature sign2: ", sign2);
         console.log("=============== genchecksumbystring sign3: ", sign3);
     } catch (error) {
