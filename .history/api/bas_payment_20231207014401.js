@@ -1,5 +1,7 @@
 var express = require('express');
 var BasChecksum = require('./baschecksum.js');
+var PaytmChecksum = require('./PaytmChecksum.js');
+const { encryptRijndeal } = require('./checksum.js');
 var dotevnv = require("dotenv");
 const axios = require("axios")
 
@@ -40,6 +42,14 @@ router.post('/checkout', async (req, res) => {
 });
 router.get('/status/:orderId', async (req, res) => {
     var { orderId } = req.params
+    console.log("status req.params :", req.params)
+    let x = BasChecksum.encrypt25622('', '')
+    console.log("=============== body :", x);
+    console.log("=============== body :", atob(x));
+    let rij = encryptRijndeal()
+    console.log("=============== body rij:", rij);
+    console.log("=============== body rij:", atob(rij));
+    return res.status(200).json(x)
 
     if (orderId) {
         await paymentStatus(orderId).then(async (response) => {
@@ -52,7 +62,7 @@ router.get('/status/:orderId', async (req, res) => {
             return res.status(409).send(data)
         })
     } else {
-        res.status(409).json({ status: 0, success: false, msg: "OrderId Not Seleceted" })
+        res.status(409).json({ status: 0, success: false, msg: "BAS_GATE Not Seleceted" })
     }
 
 
@@ -67,10 +77,10 @@ async function initPayment(order) {
     params.Body["appId"] = APPID;
     params.Body["requestTimestamp"] = requestTimestamp
     params.Body["orderType"] = "PayBill";
-    params.Body["callBackUrl"] = CALLBACKURL + `/${orderId}`;
+    params.Body["callBackUrl"] = "null" //CALLBACKURL + `/${orderId}`;
     params.Body["customerInfo"] = {};
-    params.Body["customerInfo"]["id"] = order.customerInfo.open_id.trim();
-    params.Body["customerInfo"]["name"] = order.customerInfo.name.trim();
+    params.Body["customerInfo"]["id"] = "75b32f99-5fe6-496f-8849-a5dedeb0a65f"//order.customerInfo.open_id.trim();
+    params.Body["customerInfo"]["name"] = "Abdullah AlAnsi"//order.customerInfo.name.trim();
     params.Body["amount"] = {};
     params.Body["amount"]["value"] = "980000";
     params.Body["amount"]["currency"] = "YER"
@@ -94,20 +104,26 @@ async function initPayment(order) {
     params.Body["orderDetails"]["Currency"] = 'YER';
     params.Body["orderDetails"]["TotalPrice"] = 980000.0;
 
-    var sign1,  bodyStr;
+    var sign1, sign2, sign3, bodyStr;
 
     try {
         bodyStr = JSON.stringify(params.Body).trim().replace(regex, "")
         console.log("MKEY :", MKEY);
         console.log("=============== body :", bodyStr.length, bodyStr);
 
-        let sign1 = BasChecksum.generateSignature(bodyStr, MKEY)
-        console.log("=============== body check:", sign1);
+        sign2 = await BasChecksum.generateSignature(bodyStr, MKEY);
+        sign3 = await PaytmChecksum.generateSignature(bodyStr, MKEY)
+        console.log("=============== encrypt(bodyStr, MKEY) sign1: ", sign1);
+        console.log("=============== generateSignature sign2: ", sign2);
+        console.log("=============== genchecksumbystring sign3: ", sign3);
     } catch (error) {
         console.log("Error sign:", error);
     }
 
-    var newParams = reqBody.replace("bodyy", bodyStr).replace("timess", requestTimestamp).replace("sigg", sign1)
+    // var newParams = JSON.stringify(params).trim().replace(regex, "")
+    // var newParams = reqBody.replace("bodyy", JSON.stringify(JSON.parse(tmp))).replace("timess", requestTimestamp).replace("sigg", sign1)
+    var newBody = JSON.stringify(params.Body).replace(regex, '').trim()
+    var newParams = reqBody.replace("bodyy", newBody).replace("timess", requestTimestamp).replace("sigg", sign3)
 
     var url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
 
@@ -129,7 +145,7 @@ async function paymentStatus(orderId) {
     params.Body = {}
     params.Body["appId"] = APPID;
     params.Body["orderId"] = orderId;
-    params.Body["requestTimestamp"] = requestTimestamp.toString();
+    params.Body["requestTimestamp"] = ''// requestTimestamp.toString();
 
     var sign, bodyStr;
 
@@ -138,13 +154,15 @@ async function paymentStatus(orderId) {
         console.log("MKEY :", MKEY);
         console.log("=============== body :", bodyStr.length, bodyStr);
 
-        sign = BasChecksum.generateSignature(bodyStr, MKEY)
+        // sign = await BasChecksum.generateSignature(bodyStr, MKEY);
+        sign = await PaytmChecksum.generateSignature(bodyStr, MKEY)
 
         console.log("=============== generateSignature sign: ", sign);
     } catch (error) {
         console.log("Error sign:", error);
     }
-    var newParams = reqBody.replace("bodyy", bodyStr).replace("timess", requestTimestamp).replace("sigg", sign)
+    var newBody = JSON.stringify(params.Body).replace(regex, '').trim()
+    var newParams = reqBody.replace("bodyy", newBody).replace("timess", requestTimestamp).replace("sigg", sign)
 
     var url = `${BASURL}/api/v1/merchant/secure/transaction/status`
 

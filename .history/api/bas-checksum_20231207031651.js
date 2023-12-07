@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-class BasChecksum {
+class Checksum {
     static encryptString(plainText, key, iv) {
         const cipher = crypto.createCipheriv('aes-256-cbc', key.slice(0, 32), iv);
         let encrypted = cipher.update(plainText, 'utf8', 'base64');
@@ -178,5 +178,5 @@ class BasChecksum {
     }
 }
 
-module.exports = BasChecksum;
+module.exports = Checksum;
 

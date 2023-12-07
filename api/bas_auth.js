@@ -1,13 +1,5 @@
 var express = require('express');
-const { crypt } = require('./crypt.js');
-var qs = require('qs');
-// require('dotenv').config()
 var dotevnv = require("dotenv");
-// import express from 'express';
-// const { crypt } = await import('./crypt.js');
-// import qs from 'qs';
-// // require('dotenv').config()
-// import * as dotevnv from "dotenv";
 
 dotevnv.config();
 

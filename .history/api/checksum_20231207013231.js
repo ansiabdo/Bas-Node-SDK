@@ -2,7 +2,24 @@
 
 // import { crypt } from './crypt.js'
 var { crypt } = require('./crypt');
-var crypto = require('crypto');
+var crypto = require('node:crypto');
+
+
+const { rijndael } = require('./rij/rijndael')
+
+function encryptRijndeal() {
+  const saltBytes = Buffer.from('aaaa', 'ascii')
+  const key = 'R0Biem8wOUIySkJxNGd6cQ=='
+  const algorithm = 'AES-256-CBC'
+
+  const encryptRijndael = rijndael(saltBytes, key, algorithm)
+
+  const text = 'a570f6d353a409291fd9c3db1b9d8b4b06cac6cd5b5a31318c41b151432115deaaaa'
+  const encryptText = encryptRijndael(text)
+  console.log("==================== encryptRijndeal() encryptText:", encryptText)
+  return encryptText;
+}
+
 
 
 //mandatory flag: when it set, only mandatory parameters are added to checksum
@@ -156,3 +173,4 @@ module.exports.verifychecksum = verifychecksum;
 module.exports.verifychecksumbystring = verifychecksumbystring;
 module.exports.genchecksumbystring = genchecksumbystring;
 module.exports.genchecksumforrefund = genchecksumforrefund;
+module.exports.encryptRijndeal = encryptRijndeal;
