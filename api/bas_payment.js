@@ -9,6 +9,7 @@ const router = express.Router();
 
 const BASURL = process.env.BAS_BASE_URL
 const APPID = process.env.BAS_APP_ID
+const CALLBACKURL = '/'
 const MKEY = process.env.BAS_MKEY
 const regex = /\t|\n|\r/g;
 
@@ -67,7 +68,7 @@ async function initPayment(order) {
     params.Body["appId"] = APPID;
     params.Body["requestTimestamp"] = requestTimestamp
     params.Body["orderType"] = "PayBill";
-    params.Body["callBackUrl"] = CALLBACKURL + `/${orderId}`;
+    params.Body["callBackUrl"] = CALLBACKURL + `${orderId}`;
     params.Body["customerInfo"] = {};
     params.Body["customerInfo"]["id"] = order.customerInfo.open_id.trim();
     params.Body["customerInfo"]["name"] = order.customerInfo.name.trim();
