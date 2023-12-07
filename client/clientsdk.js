@@ -143,6 +143,7 @@ async function checkPaymentStatus(orderId) {
     const ans = await fetch(url, requestOptions)
     const data = await ans.json();
     console.log('data :', data);
+    
     if (data) {
         return data;
     }
