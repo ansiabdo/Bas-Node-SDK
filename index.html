@@ -69,12 +69,7 @@
     async function processPayment(){
         console.log("===== processPayment() ======");
         let myOrder={
-            "orderDetails": {
-                "SENDER_MOBILE": "772612217",
-                "RECEIVER_MOBILE": "711271124",
-                "PRODUCT_NAME":"IPHONE 15",
-                "PRODUCT_QTY":1,
-            },
+            "orderDetails": [{"Product":"IPHONE 14 PRO MAX","Type":"Unit","Price":540000,"Qty":1,"SubTotalPrice":540000},{"Product":"IPHONE 13 PRO MAX","Type":"Unit","Price":440000,"Qty":1,"SubTotalPrice":440000}],
             "paymentProvider":"BAS_GATE",
             "customerInfo":userInfo
         }
