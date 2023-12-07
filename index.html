@@ -84,12 +84,14 @@
                     if(result && result.status==1){
                         console.log("paymentInfo :",JSON.stringify(result));
                         var data={
-                            trxStatusId:result.body.trxStatusId,
-                            trxStatus:result.body.trxStatus,
-                            trxId:result.body.trxId,
-                            trxToken:result.body.trxToken,
-                            authenticated:result.body.authenticated
+                            orderId:result.body?.order?.orderId ?? '785428',
+                            trxStatusId:result.body?.trxStatusId ?? '1111',
+                            trxStatus:result.body?.trxStatus ?? '1111',
+                            trxId:result.body?.trxId ?? '1111',
+                            trxToken:result.body?.trxToken ?? '1111',
+                            authenticated:result.body?.authenticated ?? '1111'
                         }
+                        orderId=result.body?.order?.orderId ?? '785428'
                         payment.innerText = `Payment Data :\n${JSON.stringify(data)}`;
                         document.body.appendChild(payment);
                         await basPayment(result.body)
