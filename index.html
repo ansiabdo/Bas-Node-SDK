@@ -23,6 +23,7 @@
     var authInfo;
     var access_token='';
     var userInfo={}
+    var orderId='785428'
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
         let user = document.createElement("h6");
@@ -85,11 +86,18 @@
             try {
                 let paymentInfo=  await getPayment(myOrder).then(async (result)=>{
                     alert(JSON.stringify(result))
-                    if(result && result.Status==1){
+                    if(result && result.status==1){
                         console.log("paymentInfo :",JSON.stringify(result));
-                        payment.innerText = `Payment Data :\n${JSON.stringify(result)}`;
+                        var data={
+                            trxStatusId:result.body.trxStatusId,
+                            trxStatus:result.body.trxStatus,
+                            trxId:result.body.trxId,
+                            trxToken:result.body.trxToken,
+                            authenticated:result.body.authenticated
+                        }
+                        payment.innerText = `Payment Data :\n${JSON.stringify(data)}`;
                         document.body.appendChild(payment);
-                        await basPayment(result)
+                        await basPayment(result.body)
                     }
                 });
                
@@ -104,7 +112,6 @@
     
     async function checkPayment(){
         console.log("===== processPayment() ======");
-        let orderId='785428'
         let paymentStatus = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
@@ -116,7 +123,7 @@
                         console.log("payment status :",JSON.stringify(result));
                         paymentStatus.innerText = `Payment status :\n${JSON.stringify(result)}`;
                         document.body.appendChild(paymentStatus);
-                        await basPayment(result)
+                        // await basPayment(result)
                     }
                 });
                

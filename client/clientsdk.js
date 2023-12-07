@@ -41,10 +41,10 @@ const getBasAuthCode = async (clientId) => {
 const basPayment = async (data) => {
     let paymentParams = {
         "amount": {
-            "value": data.totalAmount,
-            "currency": data.currency,
+            "value": data.order?.amount?.totalAmount ?? '0',
+            "currency": data.order?.amount?.currency ?? 'YER',
         },
-        "orderId": data.orderId,
+        "orderId": data.order?.orderId ?? '111',
         "transactionToken": data.trxToken,
         "merchantId": BAS_CLIENT_ID,
         "appId": BAS_APP_ID
@@ -65,7 +65,12 @@ const basPayment = async (data) => {
         "status":1
         }*/
         /****** End Response Example ******/
-        console.log(JSON.stringify(result));
+        console.log("basPayment Result:", JSON.stringify(result));
+        if (result) {
+            return result;
+        } else {
+            return null
+        }
     });
 
 }
