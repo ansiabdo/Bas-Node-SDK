@@ -82,7 +82,7 @@
                 let paymentInfo=  await getPayment(myOrder).then(async (result)=>{
                     alert(JSON.stringify(result))
                     if(result && result.status==1){
-                        console.log("paymentInfo :",JSON.stringify(result));
+                        console.log("processPayment result :",JSON.stringify(result));
                         var data={
                             orderId:result.body?.order?.orderId ?? '785428',
                             trxStatusId:result.body?.trxStatusId ?? '1111',
@@ -116,11 +116,18 @@
             try {
                 let paymentInfo=  await checkPaymentStatus(orderId).then(async (result)=>{
                     alert(JSON.stringify(result))
-                    if(result && result.Status==1){
-                        console.log("payment status :",JSON.stringify(result));
-                        paymentStatus.innerText = `Payment status :\n${JSON.stringify(result)}`;
+                    if(result && result.status==1){
+                        console.log("checkPaymentStatus result :",JSON.stringify(result));
+                        var data={
+                            orderId:result.body?.order?.orderId ?? '785428',
+                            trxStatusId:result.body?.trxStatusId ?? '1111',
+                            trxStatus:result.body?.trxStatus ?? 'Recoreded',
+                            trxToken:result.body?.trxToken ?? '1111',
+                            authenticated:result.body?.order?.description ?? '1111'
+                        }
+                        orderId=result.body?.order?.orderId ?? '785428'
+                        paymentStatus.innerText = `Payment Status Data :\n${JSON.stringify(data)}`;
                         document.body.appendChild(paymentStatus);
-                        // await basPayment(result)
                     }
                 });
                
