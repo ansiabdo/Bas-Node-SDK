@@ -102,8 +102,8 @@ async function initPayment(order) {
         console.log("MKEY :", MKEY);
         console.log("=============== body :", bodyStr.length, bodyStr);
 
-        let sign1 = BasChecksum.generateSignature(bodyStr, MKEY)
-        console.log("=============== body check:", sign1);
+        sign1 = BasChecksum.generateSignature(bodyStr, MKEY)
+        console.log("=============== body sign1:", sign1);
     } catch (error) {
         console.log("Error sign:", error);
     }
