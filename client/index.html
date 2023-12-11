@@ -25,6 +25,7 @@
     var orderId='785428'
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
+        console.log(BAS_CLIENT_ID);
         let user = document.createElement("h6");
         try {
             authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then(async (result)=>{
