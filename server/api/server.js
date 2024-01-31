@@ -4,10 +4,11 @@ var basAuth = require('./server-sdk/bas_auth.js');
 var basPayment = require('./server-sdk/bas_payment.js');
 var cors = require('cors');
 var morgan = require('morgan');
-var dotevnv = require("dotenv");
+// var dotevnv = require("dotenv");
 
+require('dotenv').config();
 
-dotevnv.config();
+// dotevnv.config();
 
 
 const app = express();

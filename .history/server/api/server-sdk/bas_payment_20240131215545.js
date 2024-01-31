@@ -23,19 +23,16 @@ const generateOrderId = () => {
 
 router.post('/checkout', async (req, res) => {
     var { paymentProvider, orderDetails, customerInfo } = req.body
-    console.log("==================== /checkout STARTED ========================")
 
     if (paymentProvider == "BAS_GATE") {
         await initPayment({ orderDetails, customerInfo }).then(async (response) => {
-            console.log("/checkout response :", response.data)
+            console.log("response :", response.data)
             let data = response.data
             let { trxToken, trxStatus, order } = data.body
             if (data.status == 1 && data.head?.signature) {
-                // Only these field trxToken + trxToken + order.orderId
+                // Only 
                 var input = trxToken + trxToken + order.orderId
                 var verfiy = BasChecksum.verifySignature(input, MKEY, data.head.signature)
-                console.log("verfiy :", verfiy)
-
                 if (verfiy) {
                     return res.status(200).json(data)
                 } else {
@@ -59,7 +56,7 @@ router.post('/checkout', async (req, res) => {
 
 router.get('/status/:orderId', async (req, res) => {
     var { orderId } = req.params
-    console.log(`==================== //status/${orderId} STARTED ========================`)
+
     if (orderId) {
         await paymentStatus(orderId).then(async (response) => {
             console.log("response :", response.data)
@@ -87,8 +84,6 @@ router.get('/status/:orderId', async (req, res) => {
 });
 
 async function initPayment(order) {
-    console.log(`==================== initPayment() STARTED ========================`)
-
     //#region params
     const url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
     const requestTimestamp = Date.now().toString() // "1701717164440" //
@@ -136,7 +131,7 @@ async function initPayment(order) {
         sign1 = BasChecksum.generateSignature(bodyStr, MKEY)
         console.log("=============== body sign1:", sign1);
     } catch (error) {
-        console.error("Error sign:", error);
+        console.log("Error sign:", error);
     }
 
     var newParams = reqBody.replace("bodyy", bodyStr).replace("timess", requestTimestamp).replace("sigg", sign1)
@@ -152,7 +147,6 @@ async function initPayment(order) {
 }
 
 async function paymentStatus(orderId) {
-    console.log(`==================== paymentStatus(${orderId}) STARTED ========================`)
     //#region params
     const url = `${BASURL}/api/v1/merchant/secure/transaction/status`
     const requestTimestamp = Date.now().toString() // "1701717164440" //

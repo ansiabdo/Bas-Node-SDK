@@ -1,9 +1,7 @@
 var express = require('express');
-require('dotenv').config()
+var dotevnv = require("dotenv");
 
-// var dotevnv = require("dotenv");
-
-// dotevnv.config();
+dotevnv.config();
 
 const router = express.Router();
 

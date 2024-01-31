@@ -24,9 +24,8 @@ class BasChecksum {
             stringBuilder += randomString;
             const hash = this.getHashedString(stringBuilder);
             const hashRandom = hash + randomString;
-            console.log("======generateSignature hashRandom ,key:", hashRandom ,key)
+            console.log("======generateSignature :", hashRandom)
             const encrypt = this.encrypt(hashRandom, key);
-            console.log("======generateSignature encrypt ,key:", encrypt ,key)
             return encrypt;
         } catch (ex) {
             this.showException(ex);
@@ -56,7 +55,7 @@ class BasChecksum {
     static encrypt(input, key) {
         const mySHA256 = crypto.createHash('sha256');
         const key0 = mySHA256.update(key, 'utf8').digest();
-        // console.log("============== encrypt key0:", key0)
+        console.log("============== encrypt key0:", key0)
         try {
             const cipher = crypto.createCipheriv(
                 'aes-256-cbc',
