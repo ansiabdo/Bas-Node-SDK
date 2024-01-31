@@ -29,9 +29,9 @@ router.post('/checkout', async (req, res) => {
         await initPayment({ orderDetails, customerInfo }).then(async (response) => {
             console.log("/checkout response :", response.data)
             let data = response.data
+            let { trxToken, trxStatus, order } = data.body
             if (data.status == 1 && data.head?.signature) {
                 // Only these field trxToken + trxStatus + order.orderId
-                let { trxToken, trxStatus, order } = data.body
                 var input = trxToken + trxStatus + order.orderId
                 var verfiy = BasChecksum.verifySignature(input, MKEY, data.head.signature)
                 console.log("verfiy :", verfiy)
@@ -64,9 +64,9 @@ router.get('/status/:orderId', async (req, res) => {
         await paymentStatus(orderId).then(async (response) => {
             console.log("response :", response.data)
             let data = response.data //await response.json()
+            let { trxToken, trxStatus, order } = data.body
             if (data.status == 1 && data.head?.signature) {
                 // Only these field trxToken + trxToken + order.orderId
-                let { trxToken, trxStatus, order } = data.body
                 var input = trxToken + trxStatus + order.orderId
                 var verfiy = BasChecksum.verifySignature(input, MKEY, data.head.signature)
                 if (verfiy) {
