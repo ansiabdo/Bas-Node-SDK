@@ -107,7 +107,7 @@ async function initPayment(order) {
     params.Body["customerInfo"]["id"] = ("" + order.customerInfo.open_id).trim();
     params.Body["customerInfo"]["name"] = ("" + order.customerInfo.name).trim();
     params.Body["amount"] = {};
-    params.Body["amount"]["value"] = "980000";
+    params.Body["amount"]["value"] = "19600";
     params.Body["amount"]["currency"] = "YER"
     params.Body["orderId"] = orderId;
     params.Body["orderDetails"] = {}
@@ -116,18 +116,18 @@ async function initPayment(order) {
     params.Body["orderDetails"]["Products"][0] = {}
     params.Body["orderDetails"]["Products"][0]["Product"] = "IPHONE 14 PRO MAX"
     params.Body["orderDetails"]["Products"][0]["Type"] = "Unit"
-    params.Body["orderDetails"]["Products"][0]["Price"] = 540000.0
+    params.Body["orderDetails"]["Products"][0]["Price"] = 5400.0
     params.Body["orderDetails"]["Products"][0]["Qty"] = 1
-    params.Body["orderDetails"]["Products"][0]["SubTotalPrice"] = 540000.0
+    params.Body["orderDetails"]["Products"][0]["SubTotalPrice"] = 5400.0
     params.Body["orderDetails"]["Products"][1] = {}
     params.Body["orderDetails"]["Products"][1]["Product"] = "IPHONE 13 PRO MAX"
     params.Body["orderDetails"]["Products"][1]["Type"] = "Unit"
-    params.Body["orderDetails"]["Products"][1]["Price"] = 440000.0
+    params.Body["orderDetails"]["Products"][1]["Price"] = 4400.0
     params.Body["orderDetails"]["Products"][1]["Qty"] = 1
-    params.Body["orderDetails"]["Products"][1]["SubTotalPrice"] = 440000.0
+    params.Body["orderDetails"]["Products"][1]["SubTotalPrice"] = 4400.0
 
     params.Body["orderDetails"]["Currency"] = 'YER';
-    params.Body["orderDetails"]["TotalPrice"] = 980000.0;
+    params.Body["orderDetails"]["TotalPrice"] = 19600.0;
 
     var sign1, bodyStr;
     //#endregion
