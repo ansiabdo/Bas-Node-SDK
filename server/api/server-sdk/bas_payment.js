@@ -37,9 +37,9 @@ router.post('/checkout', async (req, res) => {
                 console.log("verfiy :", verfiy)
 
                 if (verfiy) {
-                    return res.status(200).json(data)
+                    return res.status(200).json(data.body)
                 } else {
-                    return res.status(403).json(data)
+                    return res.status(403).json(data.body)
                 }
             } else {
                 return res.status(403).json(data)
