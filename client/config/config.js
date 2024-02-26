@@ -1,6 +1,6 @@
 // 'use strict';
 
-var BAS_ENVIORMENT = 'PROD';   // PROD FOR PRODUCTION
+var BAS_ENVIORMENT = 'TEST'; // 'PROD';   // PROD FOR PRODUCTION
 
 var BAS_APP_ID_PROD = "8f4871cb-b5ed-487e-baae-b6301f29db08"
 var BAS_APP_ID_TEST = "8f4871cb-b5ed-487e-baae-b6301f29db08"

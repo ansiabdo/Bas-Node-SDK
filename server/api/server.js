@@ -1,7 +1,6 @@
-
 var express = require("express")
-var basAuth = require('./server-sdk/bas_auth.js');
-var basPayment = require('./server-sdk/bas_payment.js');
+var userinfo = require('./userinfo.js');
+var payment = require('./payment.js');
 var cors = require('cors');
 var morgan = require('morgan');
 // var dotevnv = require("dotenv");
@@ -19,9 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny')) //* Only used for print the action URL
 
 // Use routers
-app.use('/auth', basAuth);
-app.use('/order', basPayment);
-app.use('/callback/:orderid', basPayment);
+app.use('/auth', userinfo);
+app.use('/order', payment);
+app.use('/callback/:orderid', payment);
 
 
 const PORT = process.env.PORT || 3000;
