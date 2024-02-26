@@ -86,20 +86,20 @@
             try {
                 let paymentInfo=  await getPayment(myOrder).then(async (result)=>{
                     alert(JSON.stringify(result))
-                    console.log("processPayment result :",JSON.stringify(result));
-                    if(result && result.actionId==0){
+                    if(result && result.status==1){
+                        console.log("processPayment result :",JSON.stringify(result));
                         var data={
-                            orderId:result.order?.orderId ?? '785428',
-                            trxStatusId:result?.trxStatusId ?? '1111',
-                            trxStatus:result?.trxStatus ?? '1111',
-                            trxId:result?.trxId ?? '1111',
-                            trxToken:result?.trxToken ?? '1111',
-                            authenticated:result?.authenticated ?? '1111'
+                            orderId:result.body?.order?.orderId ?? '785428',
+                            trxStatusId:result.body?.trxStatusId ?? '1111',
+                            trxStatus:result.body?.trxStatus ?? '1111',
+                            trxId:result.body?.trxId ?? '1111',
+                            trxToken:result.body?.trxToken ?? '1111',
+                            authenticated:result.body?.authenticated ?? '1111'
                         }
-                        orderId=result?.order?.orderId ?? '785428'
+                        orderId=result.body?.order?.orderId ?? '785428'
                         payment.innerText = `Payment Data :\n${JSON.stringify(data)}`;
                         document.body.appendChild(payment);
-                        await basPayment(result)
+                        await basPayment(result.body)
                     }
                 });   
             } catch (error) {
@@ -113,7 +113,6 @@
     
     async function checkPayment(){
         console.log("===== processPayment() ======");
-        console.log("check orderId :",orderId)
         let paymentStatus = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
