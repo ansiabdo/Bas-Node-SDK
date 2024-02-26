@@ -1,6 +1,5 @@
 var express = require('express');
 require('dotenv').config()
-var BasAuth = require('./server-sdk/basauth');
 
 const router = express.Router();
 
@@ -10,11 +9,11 @@ router.post('/userinfo', async(req, res) => {
     console.log("userinfo req :", req.body)
 
     if (authid) {
-        await BasAuth.getBasToken(authid).then(async(response) => {
+        await getBasToken(authid).then(async(response) => {
             let data = await response.json()
             console.log("================== getBasToken data :", data)
             access_token = data.access_token
-            await BasAuth.getBasUserInfo(access_token).then(async(user) => {
+            await getBasUserInfo(access_token).then(async(user) => {
                 let userData = await user.json()
                 console.log("================== getBasUserInfo data :", data)
                 return res.status(200).json(userData)
