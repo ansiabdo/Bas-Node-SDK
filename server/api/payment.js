@@ -5,6 +5,7 @@ const router = express.Router();
 require('dotenv').config()
 
 
+const MKEY = process.env.BAS_MKEY //?? "cmJsckQ1Nlh1S0FZVjJqQg=="
 
 
 router.post('/checkout', async (req, res) => {
