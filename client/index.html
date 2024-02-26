@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documet</title>
     <script type = "text/javascript" src="./config/config.js"></script>
-    <script type = "text/javascript" src="./sdk-client/clientsdk.js"></script>
+    <script type = "text/javascript" src="./client-sdk/clientsdk.js"></script>
 </head>
 <body>
     <br>
+   <center><h2> Bas JavaScript SDK v0.2</h2></center> 
     <br>
     <center>
             <button onclick='getAuthCode()' >BasGate Auth</button>
@@ -25,6 +26,10 @@
     var orderId='785428'
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
+        if(!isJSBridgeReady){
+            alert("BasSDK is not ready yet")
+            return
+        }
         console.log(BAS_CLIENT_ID);
         let user = document.createElement("h6");
         try {

@@ -5,8 +5,11 @@
 
 
 ## Client :
-- Change your BAS_CLIENT_ID and BAS_APP_ID in `client\config\config.js`.
-- Open `client\index.html`.
+- Change the values of the following parameters in `client\config\config.js`.
+    * BAS_CLIENT_ID  
+    * BAS_APP_ID
+
+- run `client\index.html`.
 
 
 

@@ -1,7 +1,7 @@
 
 //#region BAS SDK Client Side 
-var isJSBridgeReady = false
-console.log("Start Bas-ClientSDK Script");
+let isJSBridgeReady = false
+console.log("Start ClientSDK Script");
 
 async function initBas() {
     console.log("initBas() STARTED");
@@ -120,7 +120,7 @@ async function getPayment(order) {
     console.log("params :", url, JSON.stringify(order));
     const ans = await fetch(url, requestOptions)
     const data = await ans.json();
-    console.log('data :', JSON.stringify(data));
+    console.log('data :', data);
     if (data) {
         return data;
     }
@@ -143,7 +143,7 @@ async function checkPaymentStatus(orderId) {
     const ans = await fetch(url, requestOptions)
     const data = await ans.json();
     console.log('data :', data);
-
+    
     if (data) {
         return data;
     }
