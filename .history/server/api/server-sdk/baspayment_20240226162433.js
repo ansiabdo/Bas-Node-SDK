@@ -21,10 +21,7 @@ const CALLBACKURL = '/'
 const MKEY = process.env.BAS_MKEY //?? "cmJsckQ1Nlh1S0FZVjJqQg=="
 const regex = /\t|\n|\r/g;
 
-const generateOrderId = () => {
-    // Logic to generate a unique order ID (you can use a library or custom logic)
-    return '1111' + Math.floor(Math.random() * 1000000);
-};
+
 
 async function initPayment(order) {
     console.log(`==================== initPayment() STARTED ========================`)

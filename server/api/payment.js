@@ -4,17 +4,14 @@ const router = express.Router();
 require('dotenv').config()
 
 
-const generateOrderId = () => {
-    // Logic to generate a unique order ID (you can use a library or custom logic)
-    return '1111' + Math.floor(Math.random() * 1000000);
-};
 
-router.post('/checkout', async(req, res) => {
+
+router.post('/checkout', async (req, res) => {
     var { paymentProvider, orderDetails, customerInfo } = req.body
     console.log("==================== /checkout STARTED ========================")
 
     if (paymentProvider == "BAS_GATE") {
-        await BasPayment.initPayment({ orderDetails, customerInfo }).then(async(response) => {
+        await BasPayment.initPayment({ orderDetails, customerInfo }).then(async (response) => {
             console.log("/checkout response :", response.data)
             let data = response.data
             if (data.status == 1 && data.head.signature) {
@@ -34,7 +31,7 @@ router.post('/checkout', async(req, res) => {
             }
 
         }).catch((error) => {
-            let data = error.response.data || error || '{}'
+            let data = error?.response?.data || error || '{}'
             console.error("Error checkout:", data)
             return res.status(409).send(data)
         })
@@ -45,11 +42,11 @@ router.post('/checkout', async(req, res) => {
 
 });
 
-router.get('/status/:orderId', async(req, res) => {
+router.get('/status/:orderId', async (req, res) => {
     var { orderId } = req.params
     console.log(`==================== //status/${orderId} STARTED ========================`)
     if (orderId) {
-        await BasPayment.paymentStatus(orderId).then(async(response) => {
+        await BasPayment.paymentStatus(orderId).then(async (response) => {
             console.log("response :", response.data)
             let data = response.data //await response.json()
             if (data.status == 1 && data.head.signature) {
