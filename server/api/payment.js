@@ -1,3 +1,4 @@
+var BasChecksum = require('./server-sdk/baschecksum');
 var express = require('express');
 var BasPayment = require('./server-sdk/baspayment');
 const router = express.Router();
