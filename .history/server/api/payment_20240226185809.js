@@ -9,11 +9,11 @@ const MKEY = process.env.BAS_MKEY //?? "cmJsckQ1Nlh1S0FZVjJqQg=="
 
 
 router.post('/checkout', async (req, res) => {
-    var { paymentProvider, orderDetails, customerInfo, amount, orderId } = req.body
+    var { paymentProvider, orderDetails, customerInfo } = req.body
     console.log("==================== /checkout STARTED ========================")
 
     if (paymentProvider == "BAS_GATE") {
-        await BasPayment.initPayment({ orderDetails, customerInfo, amount, orderId }).then(async (response) => {
+        await BasPayment.initPayment({ orderDetails, customerInfo }).then(async (response) => {
             console.log("/checkout response :", response.data)
             let data = response.data
             if (data.status == 1 && data.head.signature) {

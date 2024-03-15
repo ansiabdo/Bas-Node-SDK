@@ -78,7 +78,9 @@
          let myOrder={
             "orderDetails": [{"Product":"IPHONE 14 PRO MAX","Type":"Unit","Price":5400,"Qty":1,"SubTotalPrice":5400},{"Product":"IPHONE 13 PRO MAX","Type":"Unit","Price":4400,"Qty":1,"SubTotalPrice":4400}],
             "paymentProvider":"BAS_GATE",
-            "customerInfo":userInfo
+            "customerInfo":userInfo,
+            "amount":{"value": 1100.0, "currency": "YER"},
+            "orderId":orderId
         }
         // alert(JSON.stringify(userInfo))
         let payment = document.createElement("h6");

@@ -1,7 +1,7 @@
 var BasChecksum = require('./baschecksum.js');
 const axios = require("axios")
 require('dotenv').config()
-// var dotevnv = require("dotenv");
+    // var dotevnv = require("dotenv");
 
 // dotevnv.config();
 
@@ -32,7 +32,7 @@ async function initPayment(order) {
     //#region params
     const url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
     const requestTimestamp = Date.now().toString() // "1701717164440" //
-    const orderId = order.orderId ? order.orderId : generateOrderId();
+    const orderId = generateOrderId();
     var reqBody = `{"head":{"signature":"sigg","requestTimeStamp":"timess"},"body":bodyy}`
     var params = {}
     params.Body = {}
@@ -44,8 +44,8 @@ async function initPayment(order) {
     params.Body["customerInfo"]["id"] = ("" + order.customerInfo.open_id).trim();
     params.Body["customerInfo"]["name"] = ("" + order.customerInfo.name).trim();
     params.Body["amount"] = {};
-    params.Body["amount"]["value"] = order.amount.value ?? "19600";// Mandatory
-    params.Body["amount"]["currency"] = order.amount.currency ?? "YER"// Mandatory
+    params.Body["amount"]["value"] = "19600";// Mandatory
+    params.Body["amount"]["currency"] = "YER"// Mandatory
     params.Body["orderId"] = orderId; // Mandatory
     params.Body["orderDetails"] = {}
     params.Body["orderDetails"]["Id"] = orderId;
@@ -93,7 +93,7 @@ async function initPayment(order) {
 
 async function paymentStatus(orderId) {
     console.log(`==================== paymentStatus(${orderId}) STARTED ========================`)
-    //#region params
+        //#region params
     const url = `${BASURL}/api/v1/merchant/secure/transaction/status`
     const requestTimestamp = Date.now().toString() // "1701717164440" //
     var reqBody = `{"head":{"signature":"sigg","requestTimeStamp":"timess"},"body":bodyy}`
