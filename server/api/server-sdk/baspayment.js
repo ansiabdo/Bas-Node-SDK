@@ -64,8 +64,8 @@ async function initPayment(order) {
     params.Body["orderDetails"]["Products"][1]["Qty"] = 1
     params.Body["orderDetails"]["Products"][1]["SubTotalPrice"] = 4400.0
 
-    params.Body["orderDetails"]["Currency"] = 'YER';
-    params.Body["orderDetails"]["TotalPrice"] = 19600.0;
+    params.Body["orderDetails"]["Currency"] = order.amount?.currency ?? 'YER';
+    params.Body["orderDetails"]["TotalPrice"] =order.amount?.value ?? 19600.0;
 
     var sign1, bodyStr;
     //#endregion

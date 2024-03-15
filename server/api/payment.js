@@ -14,7 +14,7 @@ router.post('/checkout', async (req, res) => {
 
     if (paymentProvider == "BAS_GATE") {
         await BasPayment.initPayment({ orderDetails, customerInfo, amount, orderId }).then(async (response) => {
-            console.log("/checkout response :", response.data)
+            console.log("/checkout response :", JSON.stringify(response.data))
             let data = response.data
             if (data.status == 1 && data.head.signature) {
                 // Only these field trxToken + trxStatus + order.orderId
