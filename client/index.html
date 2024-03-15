@@ -23,7 +23,12 @@
     var authInfo;
     var access_token='';
     var userInfo={}
-    var orderId='785428'
+    var orderId=null
+    const generateOrderId = () => {
+        if(orderId!=null)return orderId;
+        orderId='1111' + Math.floor(Math.random() * 1000000);
+        return orderId;
+    };
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
         if(!isJSBridgeReady){
@@ -80,7 +85,7 @@
             "paymentProvider":"BAS_GATE",
             "customerInfo":userInfo,
             "amount":{"value": 1100.0, "currency": "YER"},
-            "orderId":orderId
+            "orderId":generateOrderId()
         }
         // alert(JSON.stringify(userInfo))
         let payment = document.createElement("h6");
@@ -115,13 +120,13 @@
     
     async function checkPayment(){
         console.log("===== processPayment() ======");
-        console.log("check orderId :",orderId)
+        console.log("check generateOrderId() :",generateOrderId())
         let paymentStatus = document.createElement("h6");
         try {
             //INFO: Check if not already loggined-in 
             if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
             try {
-                let paymentInfo=  await checkPaymentStatus(orderId).then(async (result)=>{
+                let paymentInfo=  await checkPaymentStatus(generateOrderId()).then(async (result)=>{
                     alert(JSON.stringify(result))
                     if(result && result.status==1){
                         console.log("checkPaymentStatus result :",JSON.stringify(result));
