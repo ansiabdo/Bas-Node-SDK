@@ -16,17 +16,17 @@ router.post('/userinfo', async(req, res) => {
             access_token = data.access_token
             await BasAuth.getBasUserInfo(access_token).then(async(user) => {
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", userData)
+                console.log("================== getBasUserInfo data :", data)
                 return res.status(200).json(userData)
             }).catch((error) => {
-                let errdata = error.response.data
-                console.error("Error :", errdata)
-                return res.status(409).send(errdata)
+                let data = error.response.data
+                console.error("Error :", data)
+                return res.status(409).send(data)
             })
         }).catch((error) => {
-            let errdata = error.response.data
-            console.error("Error :", errdata)
-            return res.status(409).send(errdata)
+            let data = error.response.data
+            console.error("Error :", data)
+            return res.status(409).send(data)
         })
     } else {
         res.status(409).json({ status: 0, success: false, msg: "Authid Required" })
