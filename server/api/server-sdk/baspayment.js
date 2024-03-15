@@ -28,6 +28,7 @@ const generateOrderId = () => {
 
 async function initPayment(order) {
     console.log(`==================== initPayment() STARTED ========================`)
+    console.log(`order : `, order)
 
     //#region params
     const url = `${BASURL}/api/v1/merchant/secure/transaction/initiate`
@@ -44,8 +45,8 @@ async function initPayment(order) {
     params.Body["customerInfo"]["id"] = ("" + order.customerInfo.open_id).trim();
     params.Body["customerInfo"]["name"] = ("" + order.customerInfo.name).trim();
     params.Body["amount"] = {};
-    params.Body["amount"]["value"] = order.amount.value ?? "19600";// Mandatory
-    params.Body["amount"]["currency"] = order.amount.currency ?? "YER"// Mandatory
+    params.Body["amount"]["value"] = order.amount?.value ?? "19600";// Mandatory
+    params.Body["amount"]["currency"] = order.amount?.currency ?? "YER"// Mandatory
     params.Body["orderId"] = orderId; // Mandatory
     params.Body["orderDetails"] = {}
     params.Body["orderDetails"]["Id"] = orderId;
