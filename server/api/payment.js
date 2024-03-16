@@ -57,9 +57,9 @@ router.get('/status/:orderId', async (req, res) => {
                 var input = trxToken + trxStatus + order.orderId
                 var verfiy = BasChecksum.verifySignature(input, MKEY, data.head.signature)
                 if (verfiy) {
-                    return res.status(200).json(data)
+                    return res.status(200).json(data.body)
                 } else {
-                    return res.status(403).json(data)
+                    return res.status(403).json(data.body)
                 }
             } else {
                 return res.status(403).json(data)
