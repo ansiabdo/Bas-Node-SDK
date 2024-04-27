@@ -19,7 +19,7 @@ router.post('/userinfo', async(req, res) => {
                 console.log("================== getBasUserInfo data :", userData)
                 return res.status(200).json(userData)
             }).catch((error) => {
-                let errdata = error.response.data
+                let errdata = error //.response.data
                 console.error("Error :", errdata)
                 return res.status(409).send(errdata)
             })
