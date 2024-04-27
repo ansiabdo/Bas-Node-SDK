@@ -15,8 +15,8 @@ router.post('/userinfo', async(req, res) => {
             console.log("================== getBasToken data :", data)
             access_token = data.access_token
             await BasAuth.getBasUserInfo(access_token).then(async(user) => {
+                console.log("================== getBasUserInfo data :", user)
                 let userData = await user.json()
-                console.log("================== getBasUserInfo data :", userData)
                 return res.status(200).json(userData)
             }).catch((error) => {
                 let errdata = error //.response.data
