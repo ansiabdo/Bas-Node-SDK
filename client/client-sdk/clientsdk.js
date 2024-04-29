@@ -26,6 +26,19 @@ const getBasAuthCode = async (clientId) => {
         {
             clientId: clientId
         }).then(function (result) {
+            /****** Response Example ******/
+            /*
+            {
+                "status":1,
+                "data":{
+                    "auth_id":"FD268ED889B7DFB008093D04809E8B7FC26B821421B278",
+                    "authid":"FD268ED889B7DFB008093D04809E8B7FC26B821421B278",
+                    "openid":"null",
+                    "return_url":"null"},
+                "messages":["تمت العملية بنجاح"]
+            }
+            */
+            /****** End Response Example ******/
             // alert(JSON.stringify(result))
             console.log("getBasAuthCode Result:", JSON.stringify(result));
             if (result) {
@@ -36,7 +49,7 @@ const getBasAuthCode = async (clientId) => {
         });
 }
 
-const basPayment = async (data) => {
+const getBasPayment = async (data) => {
     let paymentParams = {
         "amount": {
             "value": data.order?.amount?.totalAmount ?? '0',
@@ -47,7 +60,7 @@ const basPayment = async (data) => {
         "merchantId": BAS_CLIENT_ID,
         "appId": BAS_APP_ID
     }
-
+    console.log("getBasPayment Params :", paymentParams)
     return JSBridge.call('basPayment', paymentParams).then(function (result) {
         /****** Response Example ******/
         /*{
