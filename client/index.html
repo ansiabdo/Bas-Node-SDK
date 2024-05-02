@@ -10,12 +10,12 @@
 </head>
 <body>
     <br>
-   <center><h2> Bas JavaScript SDK v0.4</h2></center> 
+   <center><h2> Bas JavaScript SDK v0.5</h2></center> 
     <br>
     <center>
-            <button onclick='getAuthCode()' >BasGate Auth</button>
-            <button onclick='processPayment()' >BasGate Payment</button>
-            <button onclick='checkPayment()' >BasGate Status</button>
+            <button onclick='getAuthCode()' >1-BasGate Auth</button>
+            <button onclick='processPayment()' >2-BasGate Payment</button>
+            <button onclick='checkPayment()' >3-BasGate Status</button>
     </center>
 </body>
 </html>
@@ -80,14 +80,16 @@
     async function processPayment(){
         console.log("===== processPayment() ======");
        //INFO: Check if not already loggined-in 
-       if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
-         let myOrder={
+        if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
+
+        let myOrder={
             "orderDetails": [{"Product":"IPHONE 14 PRO MAX","Type":"Unit","Price":5400,"Qty":1,"SubTotalPrice":5400},{"Product":"IPHONE 13 PRO MAX","Type":"Unit","Price":4400,"Qty":1,"SubTotalPrice":4400}],
             "paymentProvider":"BAS_GATE",
             "customerInfo":userInfo,
             "amount":{"value": 1100.0, "currency": "YER"},
             "orderId":generateOrderId()
         }
+
         // alert(JSON.stringify(userInfo))
         let payment = document.createElement("h6");
         try {
@@ -132,17 +134,17 @@
             try {
                 let paymentInfo=  await checkPaymentStatus(generateOrderId()).then(async (result)=>{
                     alert(JSON.stringify(result))
-                    if(result && result.status==1){
+                    if(result){
                         console.log("checkPaymentStatus result :",JSON.stringify(result));
                         var data={
-                            orderId:result.body?.order?.orderId ?? '785428',
-                            trxStatusId:result.body?.trxStatusId ?? '1111',
-                            trxStatus:result.body?.trxStatus ?? 'Recoreded',
-                            trxToken:result.body?.trxToken ?? '1111',
-                            authenticated:result.body?.order?.description ?? '1111'
+                            orderId:result.order?.orderId ?? '785428',
+                            trxStatusId:result.trxStatusId ?? '1111',
+                            trxStatus:result.trxStatus ?? 'Recoreded',
+                            trxToken:result.trxToken ?? '1111',
+                            authenticated:result.order?.description ?? '1111'
                         }
-                        orderId=result.body?.order?.orderId ?? '785428'
-                        paymentStatus.innerText = `Payment Status Data :\n${JSON.stringify(data)}`;
+                        orderId=result.order?.orderId ?? '785428'
+                        paymentStatus.innerText = `Payment Status Result :\n${JSON.stringify(result)}`;
                         document.body.appendChild(paymentStatus);
                     }
                 });

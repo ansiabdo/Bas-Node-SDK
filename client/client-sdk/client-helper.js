@@ -79,7 +79,6 @@ async function getPayment(order) {
 }
 
 async function checkPaymentStatus(orderId) {
-
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -93,8 +92,25 @@ async function checkPaymentStatus(orderId) {
     console.log("params :", url, orderId);
     const ans = await fetch(url, requestOptions)
     const data = await ans.json();
-    console.log('data :', data);
-
+    /****** Response Example ******/
+    /*
+    {
+        trxStatusId: 1003,
+        trxStatus: 'completed',
+        trxToken: 'PpyS9bhq3IhbZvGBfW6GTIzkqtL7Hew9UFkxMTExNzI1MjY2',
+        trxId: '81f1665b-6e7d-4c86-8ce4-aad2fb1dec3d',
+        order: {
+            appId: '8f4871cb-b5ed-487e-baae-b6301f29db08',
+            orderId: '1111725266',
+            amount: [Object],
+            description: 'Pay bill, reference no PayBill to 1111725266',
+            callBackUrl: 'mla3b.com',
+            orderDetails: [Object]
+        }
+    }
+    */
+    /****** End Response Example ******/
+    console.log('data :',  JSON.stringify(data));
     if (data) {
         return data;
     }
