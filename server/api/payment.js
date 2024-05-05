@@ -17,7 +17,10 @@ router.post('/checkout', async (req, res) => {
             console.log("/checkout response :", JSON.stringify(response.data))
             let data = response.data
             if (data.status == 1 && data.head.signature) {
-                // Only these field trxToken + trxStatus + order.orderId
+                /*/////////////////////////////////////////////////////
+                // #To Verfiy Signature You need only the following three fields
+                // trxToken + trxStatus + order.orderId
+                *//////////////////////////////////////////////////////
                 let { trxToken, trxStatus, order } = data.body
                 var input = trxToken + trxStatus + order.orderId
                 var verfiy = BasChecksum.verifySignature(input, MKEY, data.head.signature)
