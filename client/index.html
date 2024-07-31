@@ -10,7 +10,7 @@
 </head>
 <body>
     <br>
-   <center><h2> Bas JavaScript SDK v0.6</h2></center> 
+   <center><h2> Bas JavaScript SDK v0.8</h2></center> 
     <br>
     <center>
             <button onclick='getAuthCode()' >1-BasGate Auth</button>
@@ -80,7 +80,7 @@
     async function processPayment(){
         console.log("===== processPayment() ======");
        //INFO: Check if not already loggined-in 
-        if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
+        // if(!userInfo) await getBasAuthCode(BAS_CLIENT_ID)
 
         let myOrder={
             "orderDetails": [{"Product":"IPHONE 14 PRO MAX","Type":"Unit","Price":5400,"Qty":1,"SubTotalPrice":5400},{"Product":"IPHONE 13 PRO MAX","Type":"Unit","Price":4400,"Qty":1,"SubTotalPrice":4400}],

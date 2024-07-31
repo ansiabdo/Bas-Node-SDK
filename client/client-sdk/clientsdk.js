@@ -56,10 +56,20 @@ const getBasPayment = async (data) => {
             "currency": data.order?.amount?.currency ?? 'YER',
         },
         "orderId": data.order?.orderId ?? '111',
-        "transactionToken": data.trxToken,
-        "merchantId": BAS_CLIENT_ID,
+        "trxToken": data.trxToken,
+        // "merchantId": BAS_CLIENT_ID,
         "appId": BAS_APP_ID
     }
+    // let paymentParams = {
+    //     "amount": {
+    //         "value": data.order?.amount?.totalAmount ?? '0',
+    //         "currency": data.order?.amount?.currency ?? 'YER',
+    //     },
+    //     "orderId": data.order?.orderId ?? '111',
+    //     "transactionToken": data.trxToken,
+    //     "merchantId": BAS_CLIENT_ID,
+    //     "appId": BAS_APP_ID
+    // }
     console.log("========== getBasPayment Params :", JSON.stringify(paymentParams))
     return JSBridge.call('basPayment', paymentParams).then(function (result) {
         /****** Response Example ******/
