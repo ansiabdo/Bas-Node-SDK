@@ -60,7 +60,7 @@ const getBasPayment = async (data) => {
         "merchantId": BAS_CLIENT_ID,
         "appId": BAS_APP_ID
     }
-    console.log("getBasPayment Params :", paymentParams)
+    console.log("========== getBasPayment Params :", JSON.stringify(paymentParams))
     return JSBridge.call('basPayment', paymentParams).then(function (result) {
         /****** Response Example ******/
         /*{
