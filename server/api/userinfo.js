@@ -4,18 +4,18 @@ var BasAuth = require('./server-sdk/basauth');
 
 const router = express.Router();
 
-router.post('/userinfo', async(req, res) => {
+router.post('/userinfo', async (req, res) => {
     // Your logic to handle payment initiation
     var { authid } = req.body
     console.log("userinfo req :", req.body)
 
     if (authid) {
-        await BasAuth.getBasToken(authid).then(async(response) => {
+        await BasAuth.getBasToken(authid).then(async (response) => {
             let data = await response.json()
-            console.log("================== getBasToken data :", data)
+            console.log("================== getBasToken data :", JSON.stringify(data))
             access_token = data.access_token
-            await BasAuth.getBasUserInfo(access_token).then(async(user) => {
-                console.log("================== getBasUserInfo data :", user)
+            await BasAuth.getBasUserInfo(access_token).then(async (user) => {
+                console.log("================== getBasUserInfo data :", JSON.stringify(user))
                 let userData = await user.json()
                 return res.status(200).json(userData)
             }).catch((error) => {
