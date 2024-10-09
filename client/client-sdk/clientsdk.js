@@ -40,7 +40,8 @@ const getBasAuthCode = async (clientId) => {
             */
             /****** End Response Example ******/
             // alert(JSON.stringify(result))
-            console.log("getBasAuthCode Result:", JSON.stringify(result));
+            console.log("getBasAuthCode Result:");
+            console.log(JSON.stringify(result));
             if (result) {
                 return result;
             } else {
