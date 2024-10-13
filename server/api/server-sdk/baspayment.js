@@ -65,7 +65,7 @@ async function initPayment(order) {
     params.Body["orderDetails"]["Products"][1]["SubTotalPrice"] = 4400.0
 
     params.Body["orderDetails"]["Currency"] = order.amount?.currency ?? 'YER';
-    params.Body["orderDetails"]["TotalPrice"] =order.amount?.value ?? 19600.0;
+    params.Body["orderDetails"]["TotalPrice"] = order.amount?.value ?? 19600.0;
 
     var sign1, bodyStr;
     //#endregion
@@ -83,7 +83,7 @@ async function initPayment(order) {
     var newParams = reqBody.replace("bodyy", bodyStr).replace("timess", requestTimestamp).replace("sigg", sign1)
 
     console.log("url :", url);
-    console.log("=======================newParams :", newParams);
+    console.log("=======================newParams :", JSON.stringify(newParams));
     return await axios({
         method: 'post',
         url: url,
