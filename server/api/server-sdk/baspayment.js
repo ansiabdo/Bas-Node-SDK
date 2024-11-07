@@ -83,7 +83,7 @@ async function initPayment(order) {
     var newParams = reqBody.replace("bodyy", bodyStr).replace("timess", requestTimestamp).replace("sigg", sign1)
 
     console.log("url :", url);
-    console.log("=======================newParams :", JSON.stringify(newParams));
+    console.log("=======================newParams :", newParams);
     return await axios({
         method: 'post',
         url: url,
