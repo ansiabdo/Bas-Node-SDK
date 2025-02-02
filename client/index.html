@@ -10,8 +10,62 @@
 </head>
 <body>
     <br>
-   <center><h2> Bas JavaScript SDK v0.9</h2></center> 
+   <center><h2> Bas JavaScript SDK v0.10</h2></center> 
     <br>
+    <h1>Device Information</h1>
+    <p id="device-info"></p>
+
+    <script>
+        // function getAndroidArchitecture() {
+        //     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        //     let architecture = "Unknown";
+
+        //     // Check for Android in the user agent
+        //     if (/android/i.test(userAgent)) {
+        //         // Most Android devices use ARM architecture, but we can check for specific hints
+        //         if (/arm/i.test(userAgent) || /aarch64/i.test(userAgent)) {
+        //             architecture = "ARM (32-bit or 64-bit)";
+        //         } else if (/x86/i.test(userAgent) || /i686/i.test(userAgent)) {
+        //             architecture = "x86 (32-bit)";
+        //         } else if (/x86_64/i.test(userAgent)) {
+        //             architecture = "x86_64 (64-bit)";
+        //         }
+        //     }
+
+        //     return architecture;
+        // }
+
+        // Display the detected architecture
+        
+        function getAndroidArchitecture() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const platform = navigator.platform;
+
+            console.log("User Agent:", userAgent);  // Log the user agent string
+            console.log("platform:", platform);  // Log the user agent string
+
+            let architecture = "Unknown";
+
+            // Check for Android in the user agent
+            if (/android/i.test(userAgent)) {
+                // Default to ARM architecture for Android devices
+                architecture = "ARM (32-bit or 64-bit)";
+
+                // Check for specific architecture hints
+                if (/x86/i.test(userAgent) || /i686/i.test(userAgent)) {
+                    architecture = "x86 (32-bit)";
+                } else if (/x86_64/i.test(userAgent)) {
+                    architecture = "x86_64 (64-bit)";
+                }
+            }
+
+            return architecture + " (" + platform + ")";
+        }
+
+        document.getElementById("device-info").innerText = "Detected Architecture: " + getAndroidArchitecture();
+    </script>
+
     <center>
             <button onclick='getAuthCode()' >1-BasGate Auth</button>
             <button onclick='processPayment()' >2-BasGate Payment</button>
