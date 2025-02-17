@@ -41,6 +41,7 @@ async function getBasToken(authid) {
         return await fetch(url, requestOptions)
     }
 }
+
 async function getBasUserInfo(token) {
     console.log("getBasUserInfo :", token)
     if (token) {
