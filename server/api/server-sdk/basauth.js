@@ -5,8 +5,12 @@ class BasAuth {
     static async getBasToken(order) {
         return await getBasToken(order)
     }
-    static async getBasUserInfo(orderId) {
-        return await getBasUserInfo(orderId)
+    static async getBasUserInfo(Authid) {
+        return await getBasUserInfo(Authid)
+    }
+
+    static async getBasUserInfoV2(Authid) {
+        return await getBasUserInfoV2(Authid)
     }
 }
 
@@ -61,5 +65,32 @@ async function getBasUserInfo(token) {
 }
 
 
+async function getBasUserInfoV2(authid) {
+    console.log("getBasUserInfoV2 :", authid)
+    if (authid) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        console.log("getBasUserInfoV2 :", myHeaders)
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("client_id", CLIENTID);
+        urlencoded.append("client_secret", CLIENT_SECRET);
+        urlencoded.append("grant_type", "authorization_code");
+        urlencoded.append("code", authid);
+        urlencoded.append("redirect_uri", `${BASURL}/api/v1/auth/callback`);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: 'follow'
+        };
+
+        var url = `${BASURL}/api/v1/auth/secure/userinfo`
+
+        console.log("params :", url, urlencoded.toString());
+        return await fetch(url, requestOptions)
+    }
+}
 module.exports = BasAuth;
 // export default router;

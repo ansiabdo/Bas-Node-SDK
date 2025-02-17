@@ -1,5 +1,6 @@
 var express = require("express")
 var userinfo = require('./userinfo.js');
+var userinfo2 = require('./userinfo2.js');
 var payment = require('./payment.js');
 var cors = require('cors');
 var morgan = require('morgan');
@@ -20,6 +21,7 @@ app.use(morgan('tiny')) //* Only used for print the action URL
 // Use routers
 app.use('/auth', userinfo);
 app.use('/order', payment);
+app.use('/userinfo2', userinfo2);
 app.use('/callback/:orderid', payment);
 
 
