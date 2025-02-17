@@ -59,6 +59,7 @@
     </script>
 
     <center>
+            <button onclick='getAuthCode()' >1-BasGate UserInfo</button>
             <button onclick='getAuthCode()' >1-BasGate Auth</button>
             <button onclick='processPayment()' >2-BasGate Payment</button>
             <button onclick='checkPayment()' >3-BasGate Status</button>
@@ -76,6 +77,7 @@
         orderId='1111' + Math.floor(Math.random() * 1000000);
         return orderId;
     };
+    
     async function getAuthCode(){
         console.log("====== getAuthCode() ===========");
         if(!isJSBridgeReady){
@@ -106,6 +108,43 @@
                         return {}
                     }   
                     // return result
+                } catch (error) {
+                    console.log("ERROR :", error)
+                    return {}
+                }
+            });
+
+            // if(authInfo)
+            // {
+                
+            // }else{
+            //     user.innerText = `authInfo :${authInfo}`;
+            // }
+        } catch (error) {
+            console.log("ERROR 3:",error);
+        }
+    }
+    
+
+    async function getUserInfoV2(){
+        console.log("====== getUserInfoV2() ===========");
+        if(!isJSBridgeReady){
+            alert("BasSDK is not ready yet")
+            return
+        }
+        console.log(BAS_CLIENT_ID);
+        let user = document.createElement("h6");
+        try {
+            authInfo=  await getBasAuthCode(BAS_CLIENT_ID).then(async (result)=>{
+                try {
+                    await getUserInfoV2(result?.data?.authId).then((u)=>{
+                        userInfo=u.data
+                        access_token=result.access_token
+                        console.log("userInfo :",JSON.stringify(u));
+                        user.innerText = `User Data :\n${JSON.stringify(u.data)}`;
+                        document.body.appendChild(user);
+                    });
+ 
                 } catch (error) {
                     console.log("ERROR :", error)
                     return {}

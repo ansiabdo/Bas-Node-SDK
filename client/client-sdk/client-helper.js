@@ -26,6 +26,33 @@ async function getUserInfo(authId) {
     }
 }
 
+async function getUserInfoV2(authId) {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "authid": authId
+    });
+
+    var url = `${BASE_URL}/auth/userinfov2`
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+
+    console.log("getUserInfoV2 params :", url, raw);
+    const ans = await fetch(url, requestOptions)
+    const data = await ans.json();
+    console.log('getUserInfoV2 data :', JSON.stringify(data));
+    if (data) {
+        return data;
+    }
+}
+
 async function getPayment(order) {
 
     var myHeaders = new Headers();
